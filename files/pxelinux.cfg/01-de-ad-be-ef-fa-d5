@@ -1,0 +1,9 @@
+default menu.c32
+prompt 0
+timeout 200
+menu title ########## PXE Boot for AAP Server  ##########
+label 1
+menu label ^1) Build AAP Server
+    KERNEL http://kickstart.example.com/pxe/rhel94/vmlinuz
+    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=http://kickstart.example.com/ks/aap.cfg
+IPAPPEND 2

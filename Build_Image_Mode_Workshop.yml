@@ -49,6 +49,8 @@
       - "10.11.12.101 packagemode packagemode.{{ DOMAINNAME }}"
       - "10.11.12.102 imagemode imagemode.{{ DOMAINNAME }}"
       - "10.11.12.103 appserver appserver.{{ DOMAINNAME }}"
+      - "10.11.12.104 pipeline pipeline.{{ DOMAINNAME }}"
+      - "10.11.12.105 aap aap.{{ DOMAINNAME }}"
 
   - name: Make sure {{USERNAME}} exists
     ansible.builtin.user:

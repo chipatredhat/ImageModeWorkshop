@@ -12,6 +12,7 @@
       <host mac="de:ad:be:ef:fa:d3" name="AppServer" ip="10.11.12.103"/>
       <host mac="de:ad:be:ef:fa:d4" name="Pipeline" ip="10.11.12.104"/>
       <host mac="de:ad:be:ef:fa:d5" name="AAP" ip="10.11.12.105"/>
+      <host mac="de:ad:be:ef:fa:d6" name="SNO" ip="10.11.12.106"/>
     </dhcp>
   </ip>
 </network>

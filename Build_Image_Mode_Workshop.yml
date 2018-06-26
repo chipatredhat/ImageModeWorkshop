@@ -273,6 +273,16 @@
       src: files/rhel94.cfg
       dest: "{{ WEB_DIRECTORY }}/html/ks/rhel94.cfg"
 
+  - name: Copy aap.cfg to "{{ WEB_DIRECTORY }}/html/ks"
+    ansible.builtin.copy:
+      src: files/aap.cfg
+      dest: "{{ WEB_DIRECTORY }}/html/ks/aap.cfg"
+
+  - name: Copy pipeline.cfg to "{{ WEB_DIRECTORY }}/html/ks"
+    ansible.builtin.copy:
+      src: files/pipeline.cfg
+      dest: "{{ WEB_DIRECTORY }}/html/ks/pipeline.cfg"
+
   - name: Copy rhel94_imagemode.cfg to "{{ WEB_DIRECTORY }}/html/ks"
     ansible.builtin.copy:
       src: files/rhel94_imagemode.cfg

@@ -30,7 +30,7 @@ function create_vm {
 
 function menu {
 PS3=$'\n'"Select a server to build: "
-select menuitem in ImageMode AppServer Quit # PackageMode
+select menuitem in ImageMode AppServer Pipeline Quit # PackageMode
 do
     case $menuitem in
         "PackageMode")
@@ -39,6 +39,8 @@ do
            check_vm ImageMode de:ad:be:ef:fa:d2;;
         "AppServer")
            check_vm AppServer de:ad:be:ef:fa:d3;;
+        "Pipeline")
+           check_vm Pipeline de:ad:be:ef:fa:d4;;
          "Quit")
            echo -e "Good Bye \n\n"
            exit;;

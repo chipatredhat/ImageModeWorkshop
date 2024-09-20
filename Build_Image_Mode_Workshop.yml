@@ -1,1 +1,30 @@
 ---
+- name: Setup a Workshop for RHEL Image Mode
+  hosts: localhost
+  become: yes
+  gather_facts: yes
+  connection: local
+  vars:
+    HOSTNAME: "build"
+    DOMAINNAME: "example.com"
+    USERNAME: "lab-user"
+    USERPASSWORD: "redhat"
+
+  tasks:
+
+  - name: Set the hostname
+    ansible.builtin.hostname:
+      name: "{{ HOSTNAME }}.{{ DOMAINNAME }}"
+
+  - name: Add the hostname to /etc/hosts
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      regexp: '^127\.0\.0\.1'
+      line: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 {{ HOSTNAME }} {{ HOSTNAME }}.{{ DOMAINNAME }}"
+      owner: root
+      group: root
+      mode: 0644
+
+  -name: Set the users password
+   ansible.builtin.shell:
+     cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}

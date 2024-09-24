@@ -47,15 +47,17 @@
     ansible.builtin.shell:
       cmd: usermod -aG libvirt {{USERNAME}}
 
-  - name: Enable and start services
+  - name: Enable and start libvirt
     ansible.builtin.systemd_service:
-      name: "{{start_services}}"
+      name: libvirtd
       enabled: true
       state: started
-    vars:
-      start_services:
-      - cockpit.socket
-      - libvirtd
+
+  - name: Enable and start cockpit
+    ansible.builtin.systemd_service:
+      name: cockpit.socket
+      enabled: true
+      state: started
 
   - name: Set necessary permissions for podman
     ansible.builtin.file:

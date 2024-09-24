@@ -59,11 +59,12 @@
       enabled: true
       state: started
 
-  - name: Set necessary permissions for podman
+  - name: Set necessary permissions for newgidmap
     ansible.builtin.file:
-      path: "{{file_permissions}}"
+      path: /usr/bin/newgidmap
       mode: '4755'
-    vars:
-      file_permissions:
-      - /usr/bin/newgidmap
-      - /usr/bin/newuidmap
+
+  - name: Set necessary permissions for newuidmap
+    ansible.builtin.file:
+      path: /usr/bin/newuidmap
+      mode: '4755'

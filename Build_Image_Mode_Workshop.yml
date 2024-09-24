@@ -28,3 +28,40 @@
   -name: Set the users password
    ansible.builtin.shell:
      cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}
+     
+  - name: Install packages
+    ansible.builtin.yum:
+      name: "{{ rpm_packages }}"
+    vars:
+      rpm_packages:
+      - "@Virtualization Host"
+      - virt-manager
+      - virt-install
+      - cockpit-machines
+
+  -name: Enable Linger
+   ansible.builtin.shell:
+     cmd: loginctl enable-linger {{USERNAME}}
+
+  - name: Add user to libvirtd
+    ansible.builtin.shell:
+      cmd: usermod -aG libvirt {{USERNAME}}
+
+  - name: Enable and start services
+    ansible.builtin.systemd_service:
+      name: "{{start_services}}"
+      enabled: true
+      state: started
+    vars:
+      start_services:
+      - cockpit.socket
+      - libvirtd
+
+  - name: Set necessary permissions for podman
+    ansible.builtin.file:
+      path: "{{file_permissions}}"
+      mode: '4755'
+    vars:
+      file_permissions:
+      - /usr/bin/newgidmap
+      - /usr/bin/newuidmap

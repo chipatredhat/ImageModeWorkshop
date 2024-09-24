@@ -25,9 +25,9 @@
       group: root
       mode: 0644
 
-  -name: Set the users password
-   ansible.builtin.shell:
-     cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}
+  - name: Set the users password
+    ansible.builtin.shell:
+      cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}
      
   - name: Install packages
     ansible.builtin.yum:
@@ -39,9 +39,9 @@
       - virt-install
       - cockpit-machines
 
-  -name: Enable Linger
-   ansible.builtin.shell:
-     cmd: loginctl enable-linger {{USERNAME}}
+  - name: Enable Linger
+    ansible.builtin.shell:
+      cmd: loginctl enable-linger {{USERNAME}}
 
   - name: Add user to libvirtd
     ansible.builtin.shell:

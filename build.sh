@@ -15,6 +15,6 @@ token=$(curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-
 # Use the Red Hat Enterprise Linux 9.4 Binary DVD SHA-256 Checksum from https://access.redhat.com/downloads/content/rhel
 RHEL94="398561d7b66f1a4bf23664f4aa8f2cfbb3641aa2f01a320068e86bd1fc0e9076"
 # Download the ISO:
-mkdir /mnt/iso
-chmod 777 /mnt/iso
+sudo mkdir /mnt/iso
+sudo chmod 777 /mnt/iso
 curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL94/download -o /mnt/iso/rhel-9.4-x86_64-dvd.iso

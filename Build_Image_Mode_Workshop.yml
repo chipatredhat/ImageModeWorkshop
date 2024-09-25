@@ -34,7 +34,7 @@
       - "192.168.122.101 node1 node1.example.com"
       - "192.168.122.102 node2 node2.example.com"
       - "192.168.122.103 node3 node3.example.com"
-      
+
   - name: Set the users password
     ansible.builtin.shell:
       cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}
@@ -48,6 +48,7 @@
       - virt-manager
       - virt-install
       - cockpit-machines
+      - httpd
 
   - name: Enable Linger
     ansible.builtin.shell:
@@ -75,6 +76,12 @@
       enabled: true
       state: started
 
+  - name: Enable and start httpd
+    ansible.builtin.systemd_service:
+      name: httpd
+      enabled: true
+      state: started
+
   - name: Set necessary permissions for newgidmap
     ansible.builtin.file:
       path: /usr/bin/newgidmap
@@ -84,3 +91,12 @@
     ansible.builtin.file:
       path: /usr/bin/newuidmap
       mode: '4755'
+
+  - name: Create a mount point for the ISO
+    ansible.builtin.file:
+      path: /var/www/html/RHEL
+      state: directory
+
+  - name: Mount the ISO using command so we don't have to load ansible.posix.mount
+    ansible.builtin.shell:
+      cmd: mount -o loop /mnt/iso/rhel-9.4-x86_64-dvd.iso /var/www/html/RHEL

@@ -16,7 +16,7 @@
     ansible.builtin.hostname:
       name: "{{ HOSTNAME }}.{{ DOMAINNAME }}"
 
-  - name: Add the hostname to /etc/hosts
+  - name: Add {{ HOSTNAME }} {{ HOSTNAME }}.{{ DOMAINNAME }} to /etc/hosts
     ansible.builtin.lineinfile:
       path: /etc/hosts
       regexp: '^127\.0\.0\.1'
@@ -25,6 +25,16 @@
       group: root
       mode: 0644
 
+  - name: Add node entries to /etc/hosts
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      line: "{{HOST_ENTRIES}}"  
+    vars:
+      HOST_ENTRIES:
+      - "192.168.122.101 node1 node1.example.com"
+      - "192.168.122.102 node2 node2.example.com"
+      - "192.168.122.103 node3 node3.example.com"
+      
   - name: Set the users password
     ansible.builtin.shell:
       cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}
@@ -56,6 +66,12 @@
   - name: Enable and start cockpit
     ansible.builtin.systemd_service:
       name: cockpit.socket
+      enabled: true
+      state: started
+
+  - name: Enable and start dnsmasq
+    ansible.builtin.systemd_service:
+      name: dnsmasq
       enabled: true
       state: started
 

@@ -9,6 +9,8 @@
     DOMAINNAME: "example.com"
     USERNAME: "lab-user"
     USERPASSWORD: "redhat"
+    SERVERNAME: "server"
+    REGISTRYNAME: "registry"
 
   tasks:
 
@@ -25,15 +27,14 @@
       group: root
       mode: 0644
 
-  - name: Add node entries to /etc/hosts
+  - name: Add dns entries to /etc/hosts
     ansible.builtin.lineinfile:
       path: /etc/hosts
       line: "{{HOST_ENTRIES}}"  
     vars:
       HOST_ENTRIES:
-      - "192.168.122.101 node1 node1.example.com"
-      - "192.168.122.102 node2 node2.example.com"
-      - "192.168.122.103 node3 node3.example.com"
+      - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
+      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }}"
 
   - name: Set the users password
     ansible.builtin.shell:
@@ -97,6 +98,6 @@
       path: /var/www/html/RHEL
       state: directory
 
-  - name: Mount the ISO using command so we don't have to load ansible.posix.mount
+  - name: Mount the ISO using builtin.shell so we don't have to load ansible.posix.mount
     ansible.builtin.shell:
       cmd: mount -o loop /mnt/iso/rhel-9.4-x86_64-dvd.iso /var/www/html/RHEL

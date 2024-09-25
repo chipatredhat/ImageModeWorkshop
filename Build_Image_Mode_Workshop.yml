@@ -101,3 +101,13 @@
   - name: Mount the ISO using builtin.shell so we don't have to load ansible.posix.mount
     ansible.builtin.shell:
       cmd: mount -o loop /mnt/iso/rhel-9.4-x86_64-dvd.iso /var/www/html/RHEL
+
+  - name: Create kickstart file
+    ansible.builtin.file:
+      src: imagemode.cfg
+      dest: /var/www/html/imagemode.cfg
+
+  - name: Create the root CA for example.com
+    ansible.builtin.file:
+      src: ca.example.com.crt
+      dest: /var/www/html/ca.example.com.crt

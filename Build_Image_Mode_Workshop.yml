@@ -50,6 +50,7 @@
       - virt-install
       - cockpit-machines
       - httpd
+      - podman
 
   - name: Enable Linger
     ansible.builtin.shell:
@@ -112,3 +113,7 @@
     ansible.builtin.copy:
       src: ca.example.com.crt
       dest: /var/www/html/ca.example.com.crt
+
+##### TO DO #####
+# Create and launch registry
+# Create KVM?  Maybe just create one in cockpit and add inst.ks=http://192.168.122.1/imagemode.cfg

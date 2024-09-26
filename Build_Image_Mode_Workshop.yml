@@ -182,5 +182,18 @@
       src: files/Instructions
       dest: /home/{{ USERNAME }}/Instructions
 
-##### TO DO #####
-# Add some images to the registry from a tarball to eliminate the need to login to registry.redhat.io. Use --remove-signatures to upload native bootc containers
+# The tar file is too big for github.  Put it somewhere and download it instead
+  #- name: Extract the bootc tar file
+  #  ansible.builtin.unarchive:
+  #    src: files/bootc.tar
+  #    dest: /home/{{ USERNAME }}/ImageModeWorkshop/files
+
+  #- name: Load bootc.old
+  #  containers.podman.podman_load:
+  #    input: /home/{{ USERNAME }}/ImageModeWorkshop/files/bootc.old
+  #  become: no
+
+  #- name: Load bootc.new
+  #  containers.podman.podman_load:
+  #    input: /home/{{ USERNAME }}/ImageModeWorkshop/files/bootc.new
+  #  become: no

@@ -1,5 +1,3 @@
-# Login to registry.redhat.io
-podman login registry.redhat.io
 
 # Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
 podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest

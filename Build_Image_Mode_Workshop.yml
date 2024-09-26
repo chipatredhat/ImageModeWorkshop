@@ -197,3 +197,8 @@
   #  containers.podman.podman_load:
   #    input: /home/{{ USERNAME }}/ImageModeWorkshop/files/bootc.new
   #  become: no
+
+  ##### TO DO #####
+  # Get the ISO without needing a token
+  # Add the bootc.tar file somewhere it can be downloaded
+  # Expand the workshop with an application

@@ -11,6 +11,7 @@
     USERPASSWORD: "redhat"
     SERVERNAME: "server"
     REGISTRYNAME: "registry"
+    KSSERVER: "kickstart"
     REGISTRYDIR: /root/registry
 
   tasks:
@@ -34,7 +35,7 @@
       line: "{{ item }}"  
     with_items:
       - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
-      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }}"
+      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}"
 
   - name: Make sure {{USERNAME}} exists
     ansible.builtin.user:

@@ -31,9 +31,8 @@
   - name: Add dns entries to /etc/hosts
     ansible.builtin.lineinfile:
       path: /etc/hosts
-      line: "{{HOST_ENTRIES}}"  
-    vars:
-      HOST_ENTRIES:
+      line: "{{ item }}"  
+    with_items:
       - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
       - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }}"
 

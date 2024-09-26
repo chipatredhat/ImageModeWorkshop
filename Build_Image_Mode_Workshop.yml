@@ -37,6 +37,11 @@
       - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
       - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }}"
 
+  - name: Make sure {{USERNAME}} exists
+    ansible.builtin.user:
+      name: "{{USERNAME}}"
+      groups: wheel
+
   - name: Set the users password
     ansible.builtin.shell:
       cmd: usermod -p $(openssl passwd -1 {{USERPASSWORD}}) {{USERNAME}}

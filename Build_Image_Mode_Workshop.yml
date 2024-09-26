@@ -11,6 +11,7 @@
     USERPASSWORD: "redhat"
     SERVERNAME: "server"
     REGISTRYNAME: "registry"
+    REGISTRYDIR: /root/registry
 
   tasks:
 
@@ -99,21 +100,57 @@
       path: /var/www/html/RHEL
       state: directory
 
-# NOTE: This mount is not idempotent
-  - name: Mount the ISO using builtin.shell so we don't have to load ansible.posix.mount
-    ansible.builtin.shell:
-      cmd: mount -o loop /mnt/iso/rhel-9.4-x86_64-dvd.iso /var/www/html/RHEL
+  - name: Mount the ISO 
+    ansible.posix.mount:
+      path: /var/www/html/RHEL
+      src: /mnt/iso/rhel-9.4-x86_64-dvd.iso
+      fstype: iso9660
+      opts: ro,noauto
+      state: present
 
   - name: Create kickstart file
     ansible.builtin.copy:
-      src: imagemode.cfg
+      src: files/imagemode.cfg
       dest: /var/www/html/imagemode.cfg
 
   - name: Create the root CA for example.com
     ansible.builtin.copy:
-      src: ca.example.com.crt
+      src: files/ca.example.com.crt
       dest: /var/www/html/ca.example.com.crt
 
+  - name: Create the data directory for the registry container
+    ansible.builtin.file:
+      path: "{{ REGISTRYDIR }}/data"
+      state: directory
+
+  - name: Create the certs directory for the registry container
+    ansible.builtin.file:
+      path: "{{ REGISTRYDIR }}/certs"
+      state: directory
+
+  - name: Install the registry crt
+    ansible.builtin.copy:
+      src: files/wildcard.example.com.crt
+      dest: "{{ REGISTRYDIR }}/certs/wildcard.example.com.crt"
+
+  - name: Install the registry key
+    ansible.builtin.copy:
+      src: files/wildcard.example.com.key
+      dest: "{{ REGISTRYDIR }}/certs/wildcard.example.com.key"
+
+  - name: Create a container
+    containers.podman.podman_container:
+      name: registry
+      privileged: true
+      publish: 443:5000
+      volume:
+      - "{{ REGISTRYDIR }}/certs:/certs"
+      - "{{ REGISTRYDIR }}/data:/var/lib/registry:Z"
+      state: started
+      image: registry:latest
+      env:
+        REGISTRY_HTTP_TLS_CERTIFICATE: certs/wildcard.example.com.crt
+        REGISTRY_HTTP_TLS_KEY: certs/wildcard.example.com.key
+
 ##### TO DO #####
-# Create and launch registry
 # Create KVM?  Maybe just create one in cockpit and add inst.ks=http://192.168.122.1/imagemode.cfg

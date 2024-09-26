@@ -20,7 +20,7 @@ sudo chmod 777 /mnt/iso
 curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL94/download -o /mnt/iso/rhel-9.4-x86_64-dvd.iso
 
 # Install ansible-galaxy requirements
-ansible-galaxy install -r requirements.yml
+ansible-galaxy install -r files/requirements.yml
 
 # Now run the playbook
 ansible-playbook Build_Image_Mode_Workshop.yml -i localhost,

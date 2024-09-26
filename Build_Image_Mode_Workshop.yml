@@ -165,6 +165,7 @@
   - name: Install the example.com CA rpm so we can push to the registry
     ansible.builtin.yum:
       name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
+      disable_gpg_check: yes
 
 ##### TO DO #####
 # Create KVM?  Maybe just create one in cockpit and add inst.ks=http://192.168.122.1/imagemode.cfg

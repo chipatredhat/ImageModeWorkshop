@@ -156,3 +156,4 @@
 # Create KVM?  Maybe just create one in cockpit and add inst.ks=http://192.168.122.1/imagemode.cfg
 # Add some images to the registry to use
 # Add a Containerfile
+# Add example.com rpm to webserver

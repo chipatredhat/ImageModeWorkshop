@@ -1,0 +1,2 @@
+FROM registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
+RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.noarch.rpm

@@ -167,7 +167,20 @@
       name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
       disable_gpg_check: yes
 
+  - name: Copy Containerfile-old to the user directory
+    ansible.builtin.copy:
+      src: files/Containerfile-old
+      dest: /home/{{ USERNAME }}/Containerfile-old
+
+  - name: Copy Containerfile-new to the user directory
+    ansible.builtin.copy:
+      src: files/Containerfile-new
+      dest: /home/{{ USERNAME }}/Containerfile-new
+
+  - name: Copy Instructions to the user directory
+    ansible.builtin.copy:
+      src: files/Instructions
+      dest: /home/{{ USERNAME }}/Instructions
+
 ##### TO DO #####
-# Create KVM?  Maybe just create one in cockpit and add inst.ks=http://192.168.122.1/imagemode.cfg
-# Add some images to the registry to use : use --remove-signatures to upload native bootc containers
-# Add a Containerfile
+# Add some images to the registry from a tarball to eliminate the need to login to registry.redhat.io. Use --remove-signatures to upload native bootc containers

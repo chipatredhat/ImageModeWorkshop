@@ -1,0 +1,39 @@
+# Login to registry.redhat.io
+podman login registry.redhat.io
+
+# Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
+podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest
+
+# Push the bootc container to the registry
+podman push registry.example.com/rhel9/rhel-bootc:latest
+
+# Logon to the systems cockpit console at the https://<the_public_ip>:9090 using lab-user and redhat as your password
+# Create a virtual machine with:
+#   "Create VM"
+#     Name: ImageModeSystem
+#     Installation type: Local install media (ISO image or distro install tree)
+#     Installation source: /mnt/iso/rhel-9.4-x86_64-dvd.iso
+#   "Create and run"
+# Select the virtual machine, and in the console, Select
+#   "Install Red Hat Enterprise Linux 9.4" and press the Tab key
+# Append: inst.ks=http://kickstart.example.com/imagemode.cfg
+# Press enter to start the build.
+### NOTE:  The Console will display "Display output is not active" while the system is being built
+# When the console disconnects, you can reconnect to the deployed system.
+
+# ssh from build.example.com to the VM using lab-user/redhat
+# get root with: sudo -i
+# show the current system
+bootc status
+uname -r
+
+# Exit out of the vm, build an updated image and push it to the registry
+podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest
+
+# Push the bootc container to the registry
+podman push registry.example.com/rhel9/rhel-bootc:latest
+
+# ssh back into the VM, get root, and do an update
+sudo -i
+bootc update
+reboot

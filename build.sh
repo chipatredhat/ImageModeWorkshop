@@ -14,6 +14,17 @@ read -p "What is your offline token? " offline_token
 else
 offline_token=$1
 fi
+
+if [ "$3" = "" ] ; then
+echo -e "\n\nGet Registry Service Account credentials at https://access.redhat.com/terms-based-registry/\n"
+echo -e "NOTE: Personal credentials will work here, but it is not advised\n"
+read -p "What is the Account Name: " PMUSERNAME
+read -p "What is the Account Token/Password: " PMPASSWORD
+else
+PMUSERNAME=$2
+PMPASSWORD=$3
+fi
+
 # Get a download token:
 token=$(curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=rhsm-api -d refresh_token=$offline_token | jq --raw-output .access_token)
 # Use the Red Hat Enterprise Linux 9.4 Binary DVD SHA-256 Checksum from https://access.redhat.com/downloads/content/rhel
@@ -27,4 +38,4 @@ curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/manageme
 ansible-galaxy install -r files/requirements.yml
 
 # Now run the playbook
-ansible-playbook Build_Image_Mode_Workshop.yml -i localhost,
+ansible-playbook Build_Image_Mode_Workshop.yml -e PMUSERNAME="${PMUSERNAME}" -e PMPASSWORD="${PMPASSWORD}" -i localhost,

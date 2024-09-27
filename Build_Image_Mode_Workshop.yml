@@ -182,23 +182,27 @@
       src: files/Instructions
       dest: /home/{{ USERNAME }}/Instructions
 
-# The tar file is too big for github.  Put it somewhere and download it instead
-  #- name: Extract the bootc tar file
-  #  ansible.builtin.unarchive:
-  #    src: files/bootc.tar
-  #    dest: /home/{{ USERNAME }}/ImageModeWorkshop/files
+  - name: Login to registry.redhat.io
+    containers.podman.podman_login:
+      username: "{{ PMUSERNAME }}"
+      password: "{{ PMPASSWORD }}"
+      registry: registry.redhat.io
+    become: no
 
-  #- name: Load bootc.old
-  #  containers.podman.podman_load:
-  #    input: /home/{{ USERNAME }}/ImageModeWorkshop/files/bootc.old
-  #  become: no
+  - name: Pull images
+    containers.podman.podman_image:
+      name: "{{ item }}"
+    with_items:
+      - registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
+      - registry.redhat.io/rhel9/rhel-bootc:latest
+    become: no
 
-  #- name: Load bootc.new
-  #  containers.podman.podman_load:
-  #    input: /home/{{ USERNAME }}/ImageModeWorkshop/files/bootc.new
-  #  become: no
+  - name: Logout of registry.redhat.io
+    containers.podman.podman_logout:
+      registry: registry.redhat.io
+    become: no
+
 
   ##### TO DO #####
   # Get the ISO without needing a token
-  # Add the bootc.tar file somewhere it can be downloaded
   # Expand the workshop with an application

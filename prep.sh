@@ -5,4 +5,4 @@
 sudo dnf -y install git ansible-core
 git clone https://github.com/chipatredhat/ImageModeWorkshop.git
 cd ImageModeWorkshop
-./build.sh $1
+./build.sh $1 $2 $3

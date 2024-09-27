@@ -39,3 +39,6 @@ ansible-galaxy install -r files/requirements.yml
 
 # Now run the playbook
 ansible-playbook Build_Image_Mode_Workshop.yml -e PMUSERNAME="${PMUSERNAME}" -e PMPASSWORD="${PMPASSWORD}" -i localhost,
+
+# Clear any history that may contain sensitive information
+history -c

@@ -33,5 +33,12 @@ podman push registry.example.com/rhel9/rhel-bootc:latest
 
 # ssh back into the VM, get root, and do an update
 sudo -i
-bootc update
+bootc update  # NOTE: The cockpit console may lose connectivty, so use ssh
 reboot
+
+# ssh back into the VM, get root, and do a rollback
+sudo -i
+bootc rollback
+reboot
+
+# ssh back into the VM, get root, and show the rollback

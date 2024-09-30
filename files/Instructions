@@ -10,7 +10,7 @@ podman push registry.example.com/rhel9/rhel-bootc:latest
 #   "Create VM"
 #     Name: ImageModeSystem
 #     Installation type: Local install media (ISO image or distro install tree)
-#     Installation source: /mnt/iso/rhel-9.4-x86_64-dvd.iso
+#     Installation source: /mnt/iso/rhel-9.4-x86_64-boot.iso
 #   "Create and run"
 # Select the virtual machine, and in the console, Select
 #   "Install Red Hat Enterprise Linux 9.4" and press the Tab key

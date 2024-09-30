@@ -100,19 +100,6 @@
       path: /usr/bin/newuidmap
       mode: '4755'
 
-  - name: Create a mount point for the ISO
-    ansible.builtin.file:
-      path: /var/www/html/RHEL
-      state: directory
-
-  - name: Mount the ISO 
-    ansible.posix.mount:
-      path: /var/www/html/RHEL
-      src: /mnt/iso/rhel-9.4-x86_64-dvd.iso
-      fstype: iso9660
-      opts: loop
-      state: mounted
-
   - name: Create kickstart file
     ansible.builtin.copy:
       src: files/imagemode.cfg

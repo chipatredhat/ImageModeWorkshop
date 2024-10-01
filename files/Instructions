@@ -5,6 +5,15 @@ podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:la
 # Push the bootc container to the registry
 podman push registry.example.com/rhel9/rhel-bootc:latest
 
+# Launch the container to show we can access it as a container
+podman run --rm -d --name bootc registry.example.com/rhel9/rhel-bootc:latest
+podman exec -it bootc /bin/bash
+uname -r
+rpm -qa | grep example
+df -T # Note no sysroot
+exit
+podman stop bootc
+
 # Logon to the systems cockpit console at the https://<the_public_ip>:9090 using lab-user and redhat as your password
 # Create a virtual machine with:
 #   "Create VM"
@@ -20,10 +29,20 @@ podman push registry.example.com/rhel9/rhel-bootc:latest
 # When the console disconnects, you can reconnect to the deployed system.
 
 # ssh from build.example.com to the VM using lab-user/redhat
-# get root with: sudo -i
 # show the current system
-bootc status
 uname -r
+cat /etc/redhat-release
+rpm -qa | grep example
+ip -f inet addr show ens192
+timedatectl
+df -T / /sysroot # Notice how sysroot now exists
+id lab-user
+sudo ls /etc/sudoers.d
+sudo ls /root
+sudo touch /usr/bin/test
+echo "This file is persistent" > ~/persistent_file
+cat ~/persistent_file
+sudo bootc status
 
 # Exit out of the vm, build an updated image and push it to the registry
 podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest
@@ -31,14 +50,29 @@ podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:la
 # Push the bootc container to the registry
 podman push registry.example.com/rhel9/rhel-bootc:latest
 
-# ssh back into the VM, get root, and do an update
-sudo -i
-bootc update  # NOTE: The cockpit console may lose connectivty, so use ssh
-reboot
+# ssh back into the VM, and do an update
+sudo bootc update  # NOTE: The cockpit console may lose connectivty, so use ssh
+sudo reboot
 
-# ssh back into the VM, get root, and do a rollback
-sudo -i
-bootc rollback
-reboot
+# ssh back into the VM, show system again, show update, add to ~/persistent_file, and do a rollback
+sudo bootc status
+uname -r
+cat /etc/redhat-release
+rpm -qa | grep example
+ip -f inet addr show ens192
+timedatectl
+df -T / /sysroot # Notice how sysroot now exists
+id lab-user
+sudo ls /etc/sudoers.d
+sudo ls /root
+sudo touch /usr/bin/test
+cat ~/persistent_file
+echo "Even rollback changes are persistent" >> ~/persistent_file
+sudo bootc rollback
+sudo bootc status
+sudo reboot
 
-# ssh back into the VM, get root, and show the rollback
+# ssh back into the VM, show the rollback, and show ~/persistent_file
+sudo bootc status
+uname -r
+cat ~/persistent_file

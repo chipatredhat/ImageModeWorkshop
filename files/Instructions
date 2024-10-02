@@ -1,4 +1,12 @@
 
+***NOTE:*** *If the build server has been restarted, ensure everything is running and available:*
+
+```
+sudo systemctl start httpd
+sudo firewall-cmd --zone=libvirt --add-service=http
+sudo podman start registry
+```
+
 ### Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
     podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest
 
@@ -31,7 +39,7 @@
 
 #### ssh from build.example.com to the VM using lab-user/redhat
 *show the current system*  
-
+```
     uname -r  
     cat /etc/redhat-release  
     rpm -qa | grep example  
@@ -45,6 +53,7 @@
     echo "This file is persistent" > ~/persistent_file  
     cat ~/persistent_file  
     sudo bootc status  
+```
 
 #### Exit out of the vm, build an updated image and push it to the registry
     podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest

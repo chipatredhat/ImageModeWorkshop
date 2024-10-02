@@ -189,7 +189,12 @@
       registry: registry.redhat.io
     become: no
 
-
+  - name: Write out URL where you can logon to the Cockpit console
+    ansible.builtin.lineinfile:
+      create: true
+      path: /home/{{ USERNAME }}/Cockpit_URL.txt
+      line: https://{{ ansible_default_ipv4.address }}:9090  
+      
   ##### TO DO #####
   # Get the ISO without needing a token
   # Expand the workshop with an application

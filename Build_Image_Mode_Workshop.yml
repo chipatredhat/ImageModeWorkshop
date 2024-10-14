@@ -60,6 +60,7 @@
       - httpd
       - podman
       - haproxy
+      - syslinux-tftpboot
 
   - name: Enable firewall
     ansible.builtin.systemd_service:

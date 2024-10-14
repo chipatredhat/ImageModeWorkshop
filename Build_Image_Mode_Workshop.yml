@@ -13,6 +13,7 @@
     USERPASSWORD: "redhat"
     SERVERNAME: "server"
     REGISTRYNAME: "registry"
+    REPONAME: "repo"
     KSSERVER: "kickstart"
     REGISTRYDIR: /root/registry
 
@@ -37,7 +38,7 @@
       line: "{{ item }}"  
     with_items:
       - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
-      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}"
+      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }}"
 
   - name: Make sure {{USERNAME}} exists
     ansible.builtin.user:
@@ -262,11 +263,17 @@
       registry: registry.redhat.io
     become: no
 
-  - name: Write out URL where you can logon to the Cockpit console
+  - name: Write out URL where you can access the application
+    ansible.builtin.lineinfile:
+      create: true
+      path: /home/{{ USERNAME }}/Application_URL.txt
+      line: http://{{ ansible_default_ipv4.address }}:8080
+      
+  - name: Write out URL where you can access Cockpit
     ansible.builtin.lineinfile:
       create: true
       path: /home/{{ USERNAME }}/Cockpit_URL.txt
-      line: https://{{ ansible_default_ipv4.address }}:9090  
+      line: http://{{ ansible_default_ipv4.address }}:9090
       
   ##### TO DO #####
   # Get the ISO without needing a token

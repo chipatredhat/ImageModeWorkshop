@@ -210,7 +210,7 @@
     src: files/rhel94.cfg
     dest: /var/www/html/ks/rhel94.cfg
 
-   - name: Copy rhel94_imagemode.cfg to /var/www/html/ks
+  - name: Copy rhel94_imagemode.cfg to /var/www/html/ks
     src: files/rhel94_imagemode.cfg
     dest: /var/www/html/ks/rhel94_imagemode.cfg
 

@@ -88,3 +88,7 @@ sudo podman start registry
     uname -r
     cat ~/persistent_file
 
+TODO:
+  Build Application image with Java 11
+  Update Appication image with Java 17
+  Convert package mode to image mode

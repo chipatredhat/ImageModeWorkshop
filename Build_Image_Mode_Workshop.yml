@@ -203,18 +203,22 @@
       remote_src: true
 
   - name: Copy pxeboot menu to /var/www/html/pxe/pxelinux.cfg/default
+    ansible.builtin.copy:
     src: files/default
     dest: /var/www/html/pxe/pxelinux.cfg/default
 
   - name: Copy rhel94.cfg to /var/www/html/ks
+    ansible.builtin.copy:
     src: files/rhel94.cfg
     dest: /var/www/html/ks/rhel94.cfg
 
   - name: Copy rhel94_imagemode.cfg to /var/www/html/ks
+    ansible.builtin.copy:
     src: files/rhel94_imagemode.cfg
     dest: /var/www/html/ks/rhel94_imagemode.cfg
 
   - name: Copy rhel94_imagemodeapp.cfg to /var/www/html/ks
+    ansible.builtin.copy:
     src: files/rhel94_imagemodeapp.cfg
     dest: /var/www/html/ks/rhel94_imagemodeapp.cfg
 

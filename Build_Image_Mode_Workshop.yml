@@ -288,9 +288,13 @@
     ansible.builtin.command:
       cmd: sed -i "/range.*/a\ \ \ \ \  <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>" /etc/libvirt/qemu/networks/default.xml
 
-  - name: Restart default libvirt network
+  - name: Stop default libvirt network
     ansible.builtin.command:
-      cmd: virsh net-destroy default ; sleep 5 ; virsh net-start default
+      cmd: virsh net-destroy default
+
+  - name: Start default libvirt network
+    ansible.builtin.command:
+      cmd: virsh net-start default
 
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:

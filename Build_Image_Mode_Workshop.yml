@@ -253,16 +253,19 @@
     ansible.builtin.copy:
       src: files/Containerfile-old
       dest: /home/{{ USERNAME }}/Containerfile-old
+      owner: "{{ USERNAME }}"
 
   - name: Copy Containerfile-new to the user directory
     ansible.builtin.copy:
       src: files/Containerfile-new
       dest: /home/{{ USERNAME }}/Containerfile-new
+      owner: "{{ USERNAME }}"
 
   - name: Copy Instructions to the user directory
     ansible.builtin.copy:
       src: files/Instructions
       dest: /home/{{ USERNAME }}/Instructions
+      owner: "{{ USERNAME }}"
 
   - name: Login to registry.redhat.io
     containers.podman.podman_login:
@@ -301,17 +304,21 @@
       create: true
       path: /home/{{ USERNAME }}/Application_URL.txt
       line: http://{{ ansible_default_ipv4.address }}:8080
+      owner: "{{ USERNAME }}"
       
   - name: Write out URL where you can access Cockpit
     ansible.builtin.lineinfile:
       create: true
       path: /home/{{ USERNAME }}/Cockpit_URL.txt
       line: https://{{ ansible_default_ipv4.address }}:9090
+      owner: "{{ USERNAME }}"
 
   - name: Add start_imagemode.sh to home dir
     ansible.builtin.copy:
       src: files/start_imagemode.sh
       dest: /home/{{ USERNAME }}/start_imagemode.sh
+      mode: '0755'
+      owner: "{{ USERNAME }}"
       
   ##### TO DO #####
   # Get the ISO without needing a token

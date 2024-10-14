@@ -273,7 +273,7 @@
     ansible.builtin.lineinfile:
       create: true
       path: /home/{{ USERNAME }}/Cockpit_URL.txt
-      line: http://{{ ansible_default_ipv4.address }}:9090
+      line: https://{{ ansible_default_ipv4.address }}:9090
       
   ##### TO DO #####
   # Get the ISO without needing a token

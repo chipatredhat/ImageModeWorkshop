@@ -61,6 +61,32 @@
       - podman
       - haproxy
 
+  - name: Enable firewall
+    ansible.builtin.systemd_service:
+      state: started
+      enabled: true
+      name: firewalld
+
+  - name: Allow http in libvirt zone
+    ansible.posix.firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      zone: libvirt
+
+  - name: Allow https in libvirt zone
+    ansible.posix.firewalld:
+      service: https
+      permanent: true
+      state: enabled
+      zone: libvirt
+
+    - name: Allow 8080 for haproxy
+    ansible.posix.firewalld:
+      port: 8080/tcp
+      permanent: true
+      state: enabled
+
   - name: Enable Linger
     ansible.builtin.shell:
       cmd: loginctl enable-linger {{USERNAME}}

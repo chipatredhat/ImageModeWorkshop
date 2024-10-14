@@ -284,6 +284,10 @@
       registry: registry.redhat.io
     become: no
 
+  - name: add bootp to default libvirt network
+    ansible.builtin.command:
+      cmd: sed -i "/range.*/a\ \ \ \ \  <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>" /etc/libvirt/qemu/networks/default.xml
+
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:
       create: true

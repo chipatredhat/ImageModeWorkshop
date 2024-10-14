@@ -202,6 +202,22 @@
       dest: /var/www/html/pxe/
       remote_src: true
 
+  - name: Copy pxeboot menu to /var/www/html/pxe/pxelinux.cfg/default
+    src: files/default
+    dest: /var/www/html/pxe/pxelinux.cfg/default
+
+  - name: Copy rhel94.cfg to /var/www/html/ks
+    src: files/rhel94.cfg
+    dest: /var/www/html/ks/rhel94.cfg
+
+   - name: Copy rhel94_imagemode.cfg to /var/www/html/ks
+    src: files/rhel94_imagemode.cfg
+    dest: /var/www/html/ks/rhel94_imagemode.cfg
+
+  - name: Copy rhel94_imagemodeapp.cfg to /var/www/html/ks
+    src: files/rhel94_imagemodeapp.cfg
+    dest: /var/www/html/ks/rhel94_imagemodeapp.cfg
+
   - name: Install the example.com CA rpm so we can push to the registry
     ansible.builtin.yum:
       name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm

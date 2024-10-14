@@ -1,0 +1,19 @@
+default menu.c32
+prompt 0
+menu title ########## PXE Boot Menu ##########
+label 1
+menu label ^1) Build RHEL 9 Package Mode
+    KERNEL http://kickstart.example.com/pxe/rhel94/vmlinuz
+    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=http://kickstart.example.com/ks/rhel94.cfg
+
+label 2
+menu label ^2) Build RHEL 9 Image Mode
+    KERNEL http://kickstart.example.com/pxe/rhel94/vmlinuz
+    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=http://kickstart.example.com/ks/rhel94_imagemode.cfg
+
+label 3
+menu label ^3) Build Application Server
+    KERNEL http://kickstart.example.com/pxe/rhel94/vmlinuz
+    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=http://kickstart.example.com/ks/rhel94_imagemodeapp.cfg
+
+IPAPPEND 2

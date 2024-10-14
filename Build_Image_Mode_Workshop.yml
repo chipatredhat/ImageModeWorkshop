@@ -59,6 +59,7 @@
       - cockpit-machines
       - httpd
       - podman
+      - haproxy
 
   - name: Enable Linger
     ansible.builtin.shell:

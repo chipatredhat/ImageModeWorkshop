@@ -180,10 +180,27 @@
         REGISTRY_HTTP_TLS_CERTIFICATE: certs/wildcard.example.com.crt
         REGISTRY_HTTP_TLS_KEY: certs/wildcard.example.com.key
   
-  - name: Copy the exmaple.com CA rpm to the webserver
+  - name: Copy the example.com CA rpm to the webserver
     ansible.builtin.copy:
       src: files/example.com-root-ca-20240701-1.noarch.rpm
       dest: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
+
+  - name: Create directories in /var/www/html
+    ansible.builtin.file:
+      state: directory
+      path: "{{ item }}"
+    with_items: 
+      - /var/www/html/repo
+      - /var/www/html/ks
+      - /var/www/html/rhel94
+      - /var/www/html/pxe/rhel94
+      - /var/www/html/pxe/pxelinux.cfg
+
+  - name: Copy the pxe files to /var/www/html/pxe
+    ansible.builtin.copy:
+      src: /tftpboot/
+      dest: /var/www/html/pxe/
+      remote_src: true
 
   - name: Install the example.com CA rpm so we can push to the registry
     ansible.builtin.yum:

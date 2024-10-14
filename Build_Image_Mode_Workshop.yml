@@ -307,6 +307,11 @@
       create: true
       path: /home/{{ USERNAME }}/Cockpit_URL.txt
       line: https://{{ ansible_default_ipv4.address }}:9090
+
+  - name: Add start_imagemode.sh to home dir
+    ansible.builtin.copy:
+      src: files/start_imagemode.sh
+      dest: /home/{{ USERNAME }}/start_imagemode.sh
       
   ##### TO DO #####
   # Get the ISO without needing a token

@@ -204,7 +204,7 @@
       src: /mnt/iso/{{ ISONAME }}
       fstype: iso9660
       opts: ro
-      state: present
+      state: mounted
 
   - name: Copy the pxe files to /var/www/html/pxe
     ansible.builtin.copy:

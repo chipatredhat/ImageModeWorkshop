@@ -4,7 +4,9 @@
   become: yes
   gather_facts: yes
   connection: local
+  
   vars:
+    DEBUG: no   # yes/no true/false - Add to task `when: DEBUG == true`
     HOSTNAME: "build"
     DOMAINNAME: "example.com"
     USERNAME: "lab-user"

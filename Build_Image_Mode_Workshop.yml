@@ -16,6 +16,7 @@
     REPONAME: "repo"
     KSSERVER: "kickstart"
     REGISTRYDIR: /root/registry
+    ISONAME: rhel-9.4-x86_64-dvd.iso # rhel-9.4-x86_64-boot.iso
 
   tasks:
 
@@ -196,6 +197,14 @@
       - /var/www/html/rhel94
       - /var/www/html/pxe/rhel94
       - /var/www/html/pxe/pxelinux.cfg
+
+  - name: Mount DVD to /var/www/html/rhel94
+    mount:
+      path: /var/www/html/rhel94
+      src: /mnt/iso/{{ ISONAME }}
+      fstype: iso9660
+      opts: ro
+      state: present
 
   - name: Copy the pxe files to /var/www/html/pxe
     ansible.builtin.copy:

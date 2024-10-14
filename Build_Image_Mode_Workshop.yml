@@ -81,7 +81,7 @@
       state: enabled
       zone: libvirt
 
-    - name: Allow 8080 for haproxy
+  - name: Allow 8080 for haproxy
     ansible.posix.firewalld:
       port: 8080/tcp
       permanent: true

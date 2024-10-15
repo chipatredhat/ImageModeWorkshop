@@ -70,6 +70,18 @@
       enabled: true
       name: firewalld
 
+  - name: Enable libvirtd
+    ansible.builtin.systemd_service:
+      state: started
+      enabled: true
+      name: libvirtd
+
+  - name: Allow http in public zone
+    ansible.posix.firewalld:
+      service: http
+      permanent: true
+      state: enabled
+
   - name: Allow http in libvirt zone
     ansible.posix.firewalld:
       service: http

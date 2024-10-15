@@ -1,0 +1,14 @@
+[Unit]
+Description=Registry for Example.Com
+
+[Container]
+Image=docker.io/library/registry:latest
+Environment="REGISTRY_HTTP_TLS_CERTIFICATE=/certs/wildcard.example.com.crt"
+Environment="REGISTRY_HTTP_TLS_KEY=/certs/wildcard.example.com.key"
+Volume=/root/registry/certs:/certs
+Volume=/root/registry/data:/var/lib/registry:Z
+PublishPort=443:5000
+PodmanArgs=--privileged
+
+[Install]
+WantedBy=multi-user.target default.target

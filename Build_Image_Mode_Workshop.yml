@@ -198,7 +198,7 @@
     ansible.builtin.copy:
       src: files/registry.container
       dest: /etc/containers/systemd/registry.container
-      
+
   - name: Copy the example.com CA rpm to the webserver
     ansible.builtin.copy:
       src: files/example.com-root-ca-20240701-1.noarch.rpm

@@ -193,7 +193,12 @@
       env:
         REGISTRY_HTTP_TLS_CERTIFICATE: certs/wildcard.example.com.crt
         REGISTRY_HTTP_TLS_KEY: certs/wildcard.example.com.key
-  
+
+  - name: Install the registry.container service file
+    ansible.builtin.copy:
+      src: files/registry.container
+      dest: /etc/containers/systemd/registry.container
+      
   - name: Copy the example.com CA rpm to the webserver
     ansible.builtin.copy:
       src: files/example.com-root-ca-20240701-1.noarch.rpm

@@ -2,8 +2,6 @@
 ***NOTE:*** *If the build server has been restarted, ensure everything is running and available:*
 
 ```
-sudo systemctl start httpd
-sudo firewall-cmd --zone=libvirt --add-service=http
 sudo podman start registry
 ```
 

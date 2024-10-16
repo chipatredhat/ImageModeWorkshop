@@ -1,0 +1,4 @@
+FROM registry.example.com/rhel9/rhel-bootc:latest
+COPY local.repo /etc/yum.repos.d/local.repo
+RUN dnf install -y java-17-openjdk.x86_64 mariadb-server
+COPY *.jar /opt/spring-petclinic.jar

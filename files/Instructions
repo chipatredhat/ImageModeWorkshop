@@ -1,9 +1,4 @@
 
-***NOTE:*** *If the build server has been restarted, ensure everything is running and available:*
-
-```
-sudo podman start registry
-```
 
 ### Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
     podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest
@@ -20,23 +15,15 @@ sudo podman start registry
     exit
     podman stop bootc
 
-### Logon to the systems cockpit console at the https://<the_public_ip>:9090 using lab-user and redhat as your password
-#### Create a virtual machine with:
-- "Create VM"
-   - Name: ImageModeSystem
-   - Installation type: Local install media (ISO image or distro install tree)
-   - Installation source: /mnt/iso/rhel-9.4-x86_64-boot.iso
-   - "Create and run"
-#### Select the virtual machine, and in the console, Select
-- "Install Red Hat Enterprise Linux 9.4" and press the Tab key
-   - Append: inst.ks=http://kickstart.example.com/imagemode.cfg
-   - Press enter to start the build.  
-   - 
-    ***NOTE:**  The Console will display "Display output is not active" while the system is being built  
-    When the console disconnects, you can reconnect to the deployed system.*
 
-#### ssh from build.example.com to the VM using lab-user/redhat
-*show the current system*  
+### Create a virtual machine with:
+```
+./start_imagemode.sh imagemodebuild
+```
+Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
+
+### ssh from build.example.com to the VM using lab-user/redhat
+*Investigate the current system*  
 ```
     uname -r  
     cat /etc/redhat-release  
@@ -53,17 +40,17 @@ sudo podman start registry
     sudo bootc status  
 ```
 
-#### Exit out of the vm, build an updated image and push it to the registry
+### Exit out of the vm, build an updated image and push it to the registry
     podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest
 
-#### Push the bootc container to the registry
+### Push the bootc container to the registry
     podman push registry.example.com/rhel9/rhel-bootc:latest
 
-#### ssh back into the VM, and do an update
-    sudo bootc update  # NOTE: The cockpit console may lose connectivty, so use ssh  
+### ssh back into the VM, and do an update
+    sudo bootc update
     sudo reboot
 
-#### ssh back into the VM, show system again, show update, add to ~/persistent_file, and do a rollback
+### ssh back into the VM, show system again, show update, add to ~/persistent_file, and do a rollback
     sudo bootc status
     uname -r
     cat /etc/redhat-release
@@ -81,7 +68,7 @@ sudo podman start registry
     sudo bootc status
     sudo reboot
 
-#### ssh back into the VM, show the rollback, and show ~/persistent_file
+### ssh back into the VM, show the rollback, and show ~/persistent_file
     sudo bootc status
     uname -r
     cat ~/persistent_file

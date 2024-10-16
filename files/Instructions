@@ -1,5 +1,14 @@
 
 
+### Login to the build server
+```ssh lab-user@<IP_Address>``` Using redhat as your password
+### Examine the file Containerfile-old:
+```
+FROM registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
+RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.noarch.rpm
+```
+#### This Containerfile simply uses an older upstream bootc image (so we can update later) and adds an rpm.  We are using an rpm here that loads the CA for our example.com domain.  In real world use, this might install an rpm that is used to configure a system with the monitoring, hardening, authentication, and other baselines that are required to deploy a system on your network along with any other necessary configuration items
+
 ### Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
     podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest
 

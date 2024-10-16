@@ -287,6 +287,11 @@
       owner: "{{ USERNAME }}"
       group: users
 
+  - name: Add local.repo to /var/www/html/repo
+    ansible.builtin.copy:
+      src: files/local.repo
+      dest: /var/www/html/repo/local.repo
+
   - name: Login to registry.redhat.io
     containers.podman.podman_login:
       username: "{{ PMUSERNAME }}"

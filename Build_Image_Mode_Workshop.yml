@@ -118,7 +118,7 @@
 
   - name: Enable and start libvirt
     ansible.builtin.systemd_service:
-      name: libvirtd
+      name: libvirtd.service
       enabled: true
       state: started
 

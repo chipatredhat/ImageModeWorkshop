@@ -297,6 +297,27 @@
       owner: "{{ USERNAME }}"
       group: users
 
+  - name: Copy local.repo
+    ansible.builtin.copy:
+      src: files/local.repo
+      dest: "{{ IMFILES }}/local.repo"
+      owner: "{{ USERNAME }}"
+      group: users
+      
+  - name: Copy Containerfile-app-11 to the workshop directory
+    ansible.builtin.copy:
+      src: files/Containerfile-new
+      dest: "{{ WSDIR }}/Containerfile-app-11"
+      owner: "{{ USERNAME }}"
+      group: users
+      
+  - name: Copy Containerfile-app-17 to the workshop directory
+    ansible.builtin.copy:
+      src: files/Containerfile-new
+      dest: "{{ WSDIR }}/Containerfile-app-17"
+      owner: "{{ USERNAME }}"
+      group: users
+      
   - name: Copy Instructions to the user directory
     ansible.builtin.copy:
       src: files/Instructions
@@ -373,7 +394,7 @@
       dest: "{{ IMFILES }}/petclinic.service"
       owner: "{{ USERNAME }}"
       group: users
-      
+
   - name: Copy petclinic.sql
     ansible.builtin.copy:
       src: files/petclinic.sql

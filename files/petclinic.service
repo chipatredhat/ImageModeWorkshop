@@ -1,0 +1,14 @@
+[Unit]
+Description=Service to run the Petclinic application
+
+[Install]
+WantedBy=multi.user.target
+
+[Service]
+Type=simple
+Environment="SPRING_DATASOURCE_PASSWORD=rootpassword"
+Environment="SPRING_DATASOURCE_URL=jdbc:mysql://localhost/petclinic?serverTimezone=UTC"
+Environment="SPRING_DATASOURCE_USERNAME=root"
+ExecStart=/bin/java -jar /opt/spring-petclinic.jar --spring.profiles.active=mysql
+ExecStop=/bin/kill -15 $MAINPID
+SuccessExitStatus=143

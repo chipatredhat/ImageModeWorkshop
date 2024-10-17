@@ -122,6 +122,10 @@
       enabled: true
       state: started
 
+  - name: add bootp to default libvirt network
+    ansible.builtin.command:
+      cmd: sed -i "/range.*/a\ \ \ \ \  <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>" /etc/libvirt/qemu/networks/default.xml
+
   - name: Enable and start cockpit
     ansible.builtin.systemd_service:
       name: cockpit.socket
@@ -312,16 +316,6 @@
     containers.podman.podman_logout:
       registry: registry.redhat.io
     become: no
-
-  - name: ENSURE libvirtd is running
-    ansible.builtin.systemd_service:
-      name: libvirtd.service
-      enabled: true
-      state: started
-
-  - name: add bootp to default libvirt network
-    ansible.builtin.command:
-      cmd: sed -i "/range.*/a\ \ \ \ \  <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>" /etc/libvirt/qemu/networks/default.xml
 
   - name: Stop default libvirt network
     ansible.builtin.command:

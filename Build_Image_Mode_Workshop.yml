@@ -17,6 +17,8 @@
     KSSERVER: "kickstart"
     REGISTRYDIR: /root/registry
     ISONAME: rhel-9.4-x86_64-dvd.iso # rhel-9.4-x86_64-boot.iso
+    WSDIR: /home/{{ USERNAME }}/Workshop
+    IMFILES: "{{ WSDIR }}/files"
 
   tasks:
 
@@ -271,6 +273,14 @@
       name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
       disable_gpg_check: yes
 
+  - name: Create workshop directories
+    ansible.builtin.file:
+      state: directory
+      path: "{{ item }}"
+    with_items: 
+      - "{{ WSDIR }}"
+      - "{{ IMFILES }}"
+      
   - name: Copy Containerfile-old to the user directory
     ansible.builtin.copy:
       src: files/Containerfile-old

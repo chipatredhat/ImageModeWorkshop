@@ -293,7 +293,7 @@
   - name: Copy Containerfile-new to the workshop directory
     ansible.builtin.copy:
       src: files/Containerfile-new
-      dest: "{{ WSDIR }}/Containerfile-new:
+      dest: "{{ WSDIR }}/Containerfile-new"
       owner: "{{ USERNAME }}"
       group: users
 

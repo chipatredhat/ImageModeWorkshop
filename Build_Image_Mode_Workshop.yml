@@ -374,10 +374,10 @@
       owner: "{{ USERNAME }}"
       group: users
 
-  - name: Add start_imagemode.sh to workshop dir
+  - name: Add pxeboot_system.sh to workshop dir
     ansible.builtin.copy:
-      src: files/start_imagemode.sh
-      dest: "{{ WSDIR }}/start_imagemode.sh"
+      src: files/pxeboot_system.sh
+      dest: "{{ WSDIR }}/pxeboot_system.sh"
       mode: '0755'
       owner: "{{ USERNAME }}"
       group: users

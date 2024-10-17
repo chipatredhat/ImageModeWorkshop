@@ -306,18 +306,18 @@
       
   - name: Copy Containerfile-app-11 to the workshop directory
     ansible.builtin.copy:
-      src: files/Containerfile-new
+      src: files/Containerfile-app-11
       dest: "{{ WSDIR }}/Containerfile-app-11"
       owner: "{{ USERNAME }}"
       group: users
       
   - name: Copy Containerfile-app-17 to the workshop directory
     ansible.builtin.copy:
-      src: files/Containerfile-new
+      src: files/Containerfile-app-17
       dest: "{{ WSDIR }}/Containerfile-app-17"
       owner: "{{ USERNAME }}"
       group: users
-      
+
   - name: Copy Instructions to the user directory
     ansible.builtin.copy:
       src: files/Instructions

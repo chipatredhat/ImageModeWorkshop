@@ -276,6 +276,8 @@
   - name: Create workshop directories
     ansible.builtin.file:
       state: directory
+      owner: "{{ USERNAME }}"
+      group: users
       path: "{{ item }}"
     with_items: 
       - "{{ WSDIR }}"

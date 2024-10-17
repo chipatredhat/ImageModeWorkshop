@@ -371,7 +371,9 @@
     ansible.builtin.copy:
       src: files/petclinic.service
       dest: "{{ IMFILES }}/petclinic.service"
-
+      owner: "{{ USERNAME }}"
+      group: users
+      
   - name: Copy petclinic.sql
     ansible.builtin.copy:
       src: files/petclinic.sql

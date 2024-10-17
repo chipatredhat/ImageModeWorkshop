@@ -280,18 +280,18 @@
     with_items: 
       - "{{ WSDIR }}"
       - "{{ IMFILES }}"
-      
-  - name: Copy Containerfile-old to the user directory
+
+  - name: Copy Containerfile-old to the workshop directory
     ansible.builtin.copy:
       src: files/Containerfile-old
-      dest: /home/{{ USERNAME }}/Containerfile-old
+      dest: "{{ WSDIR }}/Containerfile-old"
       owner: "{{ USERNAME }}"
       group: users
 
-  - name: Copy Containerfile-new to the user directory
+  - name: Copy Containerfile-new to the workshop directory
     ansible.builtin.copy:
       src: files/Containerfile-new
-      dest: /home/{{ USERNAME }}/Containerfile-new
+      dest: "{{ WSDIR }}/Containerfile-new:
       owner: "{{ USERNAME }}"
       group: users
 
@@ -338,7 +338,7 @@
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:
       create: true
-      path: /home/{{ USERNAME }}/Application_URL.txt
+      path: /"{{ WSDIR }}/Application_URL.txt"
       line: http://{{ ansible_default_ipv4.address }}:8080
       owner: "{{ USERNAME }}"
       group: users
@@ -346,15 +346,15 @@
   - name: Write out URL where you can access Cockpit
     ansible.builtin.lineinfile:
       create: true
-      path: /home/{{ USERNAME }}/Cockpit_URL.txt
+      path: "{{ WSDIR }}/Cockpit_URL.txt"
       line: https://{{ ansible_default_ipv4.address }}:9090
       owner: "{{ USERNAME }}"
       group: users
 
-  - name: Add start_imagemode.sh to home dir
+  - name: Add start_imagemode.sh to workshop dir
     ansible.builtin.copy:
       src: files/start_imagemode.sh
-      dest: /home/{{ USERNAME }}/start_imagemode.sh
+      dest: "{{ WSDIR }}/start_imagemode.sh"
       mode: '0755'
       owner: "{{ USERNAME }}"
       group: users
@@ -368,7 +368,7 @@
   - name: Copy petclinic.service
     ansible.builtin.copy:
       src: files/petclinic.service
-      dest: /home/{{ USERNAME }}/petclinic.service
+      dest: "{{ IMFILES }}/petclinic.service"
 
   - name: Copy petclinic.sql
     ansible.builtin.copy:

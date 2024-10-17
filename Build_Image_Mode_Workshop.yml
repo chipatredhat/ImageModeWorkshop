@@ -156,11 +156,6 @@
       path: /usr/bin/newuidmap
       mode: '4755'
 
-  - name: Create kickstart file
-    ansible.builtin.copy:
-      src: files/imagemode.cfg
-      dest: /var/www/html/imagemode.cfg
-
   - name: Create the root CA for example.com
     ansible.builtin.copy:
       src: files/ca.example.com.crt
@@ -361,7 +356,7 @@
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:
       create: true
-      path: /"{{ WSDIR }}/Application_URL.txt"
+      path: "{{ WSDIR }}/Application_URL.txt"
       line: http://{{ ansible_default_ipv4.address }}:8080
       owner: "{{ USERNAME }}"
       group: users

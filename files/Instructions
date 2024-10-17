@@ -27,7 +27,7 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
 
 ### Create a virtual machine with:
 ```
-./start_imagemode.sh imagemodebuild
+./pxeboot_system.sh imagemode
 ```
 Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
 
@@ -82,7 +82,49 @@ Once the system is built and reboots, note the IP address and disconnect from th
     uname -r
     cat ~/persistent_file
 
+### Deploy a Java 11 application using the base image previously created
+```
+podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+podman push registry.example.com/rhel9/rhel-bootc-app:latest
+./pxeboot_system.sh app
+```
+Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
+
+### ssh from build.example.com to the application VM using lab-user/redhat
+Populate data in the application so we can show persistence:
+```
+./application_install.sh
+```
+
+### You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt
+***NOTE: This does not yet work unless you update the IP address on the last line of /etc/haproxy/haproxy.cfg to the IP address of the VM that was created and do a systemctl restart haproxy***
+
+### Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17
+
+### After you have added some data and verify it was saved, let's update the system to Java 17
+```
+podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+podman push registry.example.com/rhel9/rhel-bootc-app:latest
+```
+
+### ssh to your application server and update it
+```
+sudo bootc update
+sudo reboot
+```
+***NOTE: You will need to ssh into the system and run ```sudo systemctl restart petclinic``` at the moment
+
+### Visit your application again and verify the data you entered has persisted through the upgrade
+
+### Add some new data, and lets do a rollback to ensure we still maintain data persistence in a scenario where an issue was discovered with the application that requires a rollback
+
+### After adding additional data and verifiying it was saved, ssh back into your application server and do a rollback with
+```
+sudo bootc rollback
+reboot
+```
+
+### After the rollback, access your application and confirm that all data has persisted
+
 TODO:
-  Build Application image with Java 11
-  Update Appication image with Java 17
-  Convert package mode to image mode
+  Convert a package mode installation to image mode

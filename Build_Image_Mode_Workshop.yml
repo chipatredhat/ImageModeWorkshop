@@ -406,8 +406,4 @@
     ansible.builtin.systemd_service:
       state: started
       enabled: true
-      name: haproxy 
-      
-  ##### TO DO #####
-  # Get the ISO without needing a token
-  # Expand the workshop with an application
+      name: haproxy

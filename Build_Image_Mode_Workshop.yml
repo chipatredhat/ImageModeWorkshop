@@ -214,6 +214,7 @@
       - /var/www/html/rhel94
       - /var/www/html/pxe/rhel94
       - /var/www/html/pxe/pxelinux.cfg
+      - /var/www/html/petclinic
 
   - name: Mount DVD to /var/www/html/rhel94
     mount:
@@ -353,6 +354,16 @@
       src: files/haproxy.cfg
       dest: /etc/haproxy/haproxy.cfg
       backup: no
+
+  - name: Copy petclinic.service
+    ansible.builtin.copy:
+      src: files/petclinic.service
+      dest: /home/{{ USERNAME }}/petclinic.service
+
+  - name: Copy petclinic.sql
+    ansible.builtin.copy:
+      src: files/petclinic.sql
+      dest: /var/www/html/petclinic/petclinic.sql
 
   - name: Start haproxy
     ansible.builtin.systemd_service:

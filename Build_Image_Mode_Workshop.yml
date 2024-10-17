@@ -401,12 +401,7 @@
     ansible.builtin.copy:
       src: files/petclinic.sql
       dest: /var/www/html/petclinic/petclinic.sql
-
-  - name: Copy application_install.sh
-    ansible.builtin.copy:
-      src: files/application_install.sh
-      dest: /var/www/html/petclinic/application_install.sh
-      
+   
   - name: Start haproxy
     ansible.builtin.systemd_service:
       state: started

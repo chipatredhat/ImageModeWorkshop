@@ -13,7 +13,7 @@ function vm_exists {
 	read -n 1 -p "The $1 server already exists.  Would you like to delete it and recreate it? (Y/N) " RESPONSE
     if [ "${RESPONSE^}" = "Y" ]
     then
-    echo "deleting vm"
+    echo -e "\ndeleting vm...\n"
     sudo virsh destroy $1 && sudo virsh undefine $1 --remove-all-storage
     create_vm $1 $2
     else
@@ -24,7 +24,6 @@ function vm_exists {
 
 function create_vm {
     sudo virt-install --pxe --network network=imnet,mac="${2}" --name "${1}"  --memory 4096 --disk size=20 --nographics --boot menu=on,useserial=on --osinfo rhel9.4
-	echo "this ran create_vm on $1 with MAC $2"
     exit
 }
 

@@ -24,11 +24,6 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
     exit
     podman stop bootc
 
-### NOTE: Before you can run the following to create a VM, you must restart the network with
-```
-sudo virsh net-destroy default
-sudo virsh net-start default
-```
 ### Create a virtual machine with:
 ```
 ./pxeboot_system.sh imagemode
@@ -101,7 +96,6 @@ Populate data in the application so we can show persistence:
 ```
 
 ### You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt
-***NOTE: This does not yet work unless you update the IP address on the last line of /etc/haproxy/haproxy.cfg to the IP address of the VM that was created and do a systemctl restart haproxy***
 
 ### Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17
 

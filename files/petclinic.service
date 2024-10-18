@@ -11,4 +11,6 @@ Environment="SPRING_DATASOURCE_URL=jdbc:mysql://localhost/petclinic?serverTimezo
 Environment="SPRING_DATASOURCE_USERNAME=root"
 ExecStart=/bin/java -jar /opt/spring-petclinic.jar --spring.profiles.active=mysql
 ExecStop=/bin/kill -15 $MAINPID
+Restart=always
+RestartSec=3
 SuccessExitStatus=143

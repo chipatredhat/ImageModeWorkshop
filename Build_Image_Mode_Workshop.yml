@@ -243,10 +243,10 @@
       dest: /var/www/html/pxe/
       remote_src: true
 
-  - name: Copy pxeboot menu to /var/www/html/pxe/pxelinux.cfg/default
+  - name: Copy pxeboot files to /var/www/html/pxe/pxelinux.cfg/
     ansible.builtin.copy:
-      src: files/default
-      dest: /var/www/html/pxe/pxelinux.cfg/default
+      src: files/pxelinux.cfg/
+      dest: /var/www/html/pxe/pxelinux.cfg/
 
   - name: Copy rhel94.cfg to /var/www/html/ks
     ansible.builtin.copy:

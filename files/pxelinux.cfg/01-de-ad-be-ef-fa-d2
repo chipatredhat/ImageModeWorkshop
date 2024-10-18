@@ -3,8 +3,7 @@ prompt 0
 timeout 200
 menu title ########## PXE Boot for ImageMode Server  ##########
 label 1
-menu label ^1) Build Application Server automatically
+menu label ^1) Build ImageMode Server
     KERNEL http://kickstart.example.com/pxe/rhel94/vmlinuz
-    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=ht
-tp://kickstart.example.com/ks/rhel94_imagemode.cfg
+    APPEND initrd=http://kickstart.example.com/pxe/rhel94/initrd.img inst.stage2=http://kickstart.example.com/rhel94/ console=ttyS0 inst.ks=http://kickstart.example.com/ks/rhel94_imagemode.cfg
 IPAPPEND 2

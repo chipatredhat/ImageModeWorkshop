@@ -26,7 +26,7 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
 
 ### Create a virtual machine with:
 ```
-./pxeboot_system.sh imagemode
+./pxeboot_system.sh
 ```
 Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
 
@@ -85,7 +85,7 @@ Once the system is built and reboots, note the IP address and disconnect from th
 ```
 podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
-./pxeboot_system.sh app
+./pxeboot_system.sh
 ```
 Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
 
@@ -110,7 +110,7 @@ podman push registry.example.com/rhel9/rhel-bootc-app:latest
 sudo bootc update
 sudo reboot
 ```
-***NOTE: You will need to ssh into the system and run ```sudo systemctl restart petclinic``` at the moment
+***NOTE: You may need to ssh into the system and run ```sudo systemctl restart petclinic``` at the moment if the application doesn't come up on it's own
 
 ### Visit your application again and verify the data you entered has persisted through the upgrade
 

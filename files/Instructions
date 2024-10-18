@@ -24,7 +24,11 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
     exit
     podman stop bootc
 
-
+### NOTE: Before you can run the following to create a VM, you must restart the network with
+```
+sudo virsh net-destroy default
+sudo virsh net-start default
+```
 ### Create a virtual machine with:
 ```
 ./pxeboot_system.sh imagemode

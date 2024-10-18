@@ -38,7 +38,12 @@
   - name: Add dns entries to /etc/hosts
     ansible.builtin.lineinfile:
       path: /etc/hosts
-      line: "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }} {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
+      line: "{{ item }}"
+    with_items: 
+      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }} {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
+      - "10.11.12.101 packagemode packagemode.{{ DOMAINNAME }}"
+      - "10.11.12.102 imagemode imagemode.{{ DOMAINNAME }}"
+      - "10.11.12.103 appserver appserver.{{ DOMAINNAME }}"
 
   - name: Make sure {{USERNAME}} exists
     ansible.builtin.user:

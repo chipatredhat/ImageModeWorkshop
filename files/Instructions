@@ -28,9 +28,11 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
 ```
 ./pxeboot_system.sh
 ```
-Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
+Once the system is built and reboots, disconnect from the virtual console using Ctrl-]
 
-### ssh from build.example.com to the VM using lab-user/redhat
+### ssh into your imagemode server using lab-user/redhat
+``` ssh imagemode ```
+
 *Investigate the current system*  
 ```
     uname -r  
@@ -48,17 +50,21 @@ Once the system is built and reboots, note the IP address and disconnect from th
     sudo bootc status  
 ```
 
-### Exit out of the vm, build an updated image and push it to the registry
+### Exit out of the server, build an updated image and push it to the registry
     podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest
 
 ### Push the bootc container to the registry
     podman push registry.example.com/rhel9/rhel-bootc:latest
 
-### ssh back into the VM, and do an update
+### ssh back into your server, and do an update
+```ssh imagemode```
+
     sudo bootc update
     sudo reboot
 
-### ssh back into the VM, show system again, show update, add to ~/persistent_file, and do a rollback
+### ssh back into your server, show system again, show update, add to ~/persistent_file, and do a rollback
+```ssh imagemode```
+
     sudo bootc status
     uname -r
     cat /etc/redhat-release
@@ -76,7 +82,9 @@ Once the system is built and reboots, note the IP address and disconnect from th
     sudo bootc status
     sudo reboot
 
-### ssh back into the VM, show the rollback, and show ~/persistent_file
+### ssh back into your server, show the rollback, and show ~/persistent_file
+```ssh imagemode```
+
     sudo bootc status
     uname -r
     cat ~/persistent_file
@@ -87,9 +95,11 @@ podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ./pxeboot_system.sh
 ```
-Once the system is built and reboots, note the IP address and disconnect from the virtual console using Ctrl-]
+Once the system is built and reboots, disconnect from the virtual console using Ctrl-]
 
-### ssh from build.example.com to the application VM using lab-user/redhat
+### ssh your application server using lab-user/redhat
+``` ssh appserver```
+
 Populate data in the application so we can show persistence:
 ```
 ./application_install.sh
@@ -105,7 +115,9 @@ podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ```
 
-### ssh to your application server and update it
+### ssh back into your application server and update it
+``` ssh appserver```
+
 ```
 sudo bootc update
 sudo reboot
@@ -117,6 +129,8 @@ sudo reboot
 ### Add some new data, and lets do a rollback to ensure we still maintain data persistence in a scenario where an issue was discovered with the application that requires a rollback
 
 ### After adding additional data and verifiying it was saved, ssh back into your application server and do a rollback with
+``` ssh appserver```
+
 ```
 sudo bootc rollback
 reboot

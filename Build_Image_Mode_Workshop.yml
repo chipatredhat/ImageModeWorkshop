@@ -38,10 +38,7 @@
   - name: Add dns entries to /etc/hosts
     ansible.builtin.lineinfile:
       path: /etc/hosts
-      line: "{{ item }}"  
-    with_items:
-      - "192.168.122.101 {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
-      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }}"
+      line: "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }} {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
 
   - name: Make sure {{USERNAME}} exists
     ansible.builtin.user:
@@ -118,15 +115,16 @@
     ansible.builtin.shell:
       cmd: usermod -aG libvirt {{USERNAME}}
 
-  - name: Enable and start libvirt
-    ansible.builtin.systemd_service:
-      name: libvirtd.service
-      enabled: true
-      state: started
+  - name: Define imnet libvirt network
+    community.libvirt.virt_net:
+      command: define
+      name: imnet
+      xml: '{{ lookup("template", "files/imnet.xml") }}'
 
-  - name: add bootp to default libvirt network
-    ansible.builtin.command:
-      cmd: sed -i "/range.*/a\ \ \ \ \  <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>" /etc/libvirt/qemu/networks/default.xml
+  - name: Start imnet libvirt network
+    community.libvirt.virt_net:
+      command: start
+      name: imnet
 
   - name: Enable and start cockpit
     ansible.builtin.systemd_service:
@@ -352,13 +350,6 @@
       registry: registry.redhat.io
     become: no
 
-  - name: Stop default libvirt network
-    ansible.builtin.command:
-      cmd: virsh net-destroy default
-
-  - name: Start default libvirt network
-    ansible.builtin.command:
-      cmd: virsh net-start default
 
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:

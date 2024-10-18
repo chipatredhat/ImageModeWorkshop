@@ -23,7 +23,7 @@ function vm_exists {
 }
 
 function create_vm {
-    sudo virt-install --pxe --network network=default,mac="${2}" --name "${1}"  --memory 4096 --disk size=20 --nographics --boot menu=on,useserial=on --osinfo rhel9.4
+    sudo virt-install --pxe --network network=imnet,mac="${2}" --name "${1}"  --memory 4096 --disk size=20 --nographics --boot menu=on,useserial=on --osinfo rhel9.4
 	echo "this ran create_vm on $1 with MAC $2"
     exit
 }

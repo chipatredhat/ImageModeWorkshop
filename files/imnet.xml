@@ -1,0 +1,15 @@
+<network>
+  <name>imnet</name>
+  <forward mode='nat'/>
+  <bridge name='imnet' stp='on' delay='0'/>
+  <mac address='de:ad:be:ef:fa:d9'/>
+  <ip address='10.11.12.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='10.11.12.200' end='10.11.12.254'/>
+      <bootp file='http://kickstart.example.com/pxe/pxelinux.0'/>
+      <host mac="de:ad:be:ef:fa:d1" name="PackageMode" ip="10.11.12.101"/>
+      <host mac="de:ad:be:ef:fa:d2" name="ImageMode" ip="10.11.12.102"/>
+      <host mac="de:ad:be:ef:fa:d3" name="AppServer" ip="10.11.12.103"/>
+    </dhcp>
+  </ip>
+</network>

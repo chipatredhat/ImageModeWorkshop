@@ -2,7 +2,7 @@
 Description=Service to run the Petclinic application
 
 [Install]
-WantedBy=multi.user.target
+WantedBy=default.target
 
 [Service]
 Type=simple

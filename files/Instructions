@@ -115,11 +115,11 @@ podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ```
 
-### ssh back into your application server and update it
+### ssh back into your application server and update it.  This time, we will have bootc automatically apply the update and reboot after it loads.
 ``` ssh appserver```
 
 ```
-sudo bootc update
+sudo bootc update --apply
 sudo reboot
 ```
 

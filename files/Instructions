@@ -120,7 +120,6 @@ podman push registry.example.com/rhel9/rhel-bootc-app:latest
 
 ```
 sudo bootc update --apply
-sudo reboot
 ```
 
 ### Visit your application again and verify the data you entered has persisted through the upgrade

@@ -137,4 +137,4 @@ reboot
 ### After the rollback, access your application and confirm that all data has persisted
 
 TODO:
-  Convert a package mode installation to image mode
+  Convert a package mode installation to image mode once it's closer to GA

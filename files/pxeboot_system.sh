@@ -29,7 +29,7 @@ function create_vm {
 
 function menu {
 PS3=$'\n'"Select a server to build: "
-select menuitem in PackageMode ImageMode AppServer Quit
+select menuitem in ImageMode AppServer Quit # PackageMode
 do
     case $menuitem in
         "PackageMode")

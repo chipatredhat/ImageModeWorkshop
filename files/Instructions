@@ -102,7 +102,7 @@ Once the system is built and reboots, disconnect from the virtual console using 
 
 Populate data in the application so we can show persistence:
 ```
-./application_install.sh
+./load_application_data.sh
 ```
 
 ### You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt
@@ -122,7 +122,6 @@ podman push registry.example.com/rhel9/rhel-bootc-app:latest
 sudo bootc update
 sudo reboot
 ```
-***NOTE: You may need to ssh into the system and run ```sudo systemctl restart petclinic``` at the moment if the application doesn't come up on it's own
 
 ### Visit your application again and verify the data you entered has persisted through the upgrade
 

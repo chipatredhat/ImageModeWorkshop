@@ -149,15 +149,17 @@
       enabled: true
       state: started
 
-  - name: Set necessary permissions for newgidmap
-    ansible.builtin.file:
-      path: /usr/bin/newgidmap
-      mode: '4755'
-
-  - name: Set necessary permissions for newuidmap
-    ansible.builtin.file:
+  - name: Check capabilities of newuidmap
+    community.general.capabilities:
       path: /usr/bin/newuidmap
-      mode: '4755'
+      capability: cap_setuid+ep
+      state: present
+
+  - name: Check capabilities of newgidmap
+    community.general.capabilities:
+      path: /usr/bin/newgidmap
+      capability: cap_setgid+ep
+      state: present
 
   - name: Create the root CA for example.com
     ansible.builtin.copy:

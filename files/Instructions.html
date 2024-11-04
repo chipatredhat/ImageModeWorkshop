@@ -15,6 +15,8 @@ rpm -qa | grep example
 df -T  ***Note:** no sysroot*
 exit
 podman stop bootc</code></pre>
+<h3 id="examine-the-kickstart-file-we-will-use-to-build-this-server">Examine the kickstart file we will use to build this server</h3>
+<pre><code>less /var/www/html/ks/rhel94_imagemode.cfg</code></pre>
 <h3 id="create-a-virtual-machine-with">Create a virtual machine with:</h3>
 <pre><code>./pxeboot_system.sh</code></pre>
 <p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>
@@ -24,9 +26,9 @@ podman stop bootc</code></pre>
 <pre><code>    uname -r  
     cat /etc/redhat-release  
     rpm -qa | grep example  
-    ip -f inet addr show ens192  
+    ip a  
     timedatectl  
-    df -T / /sysroot *Notice how sysroot now exists*  
+    df -T *Notice how sysroot now exists*  
     id lab-user  
     sudo ls /etc/sudoers.d  
     sudo ls /root  
@@ -48,14 +50,8 @@ sudo reboot</code></pre>
 uname -r
 cat /etc/redhat-release
 rpm -qa | grep example
-ip -f inet addr show ens192
+ip a
 timedatectl
-df -T / /sysroot # Notice how sysroot now exists
-id lab-user
-sudo ls /etc/sudoers.d
-sudo ls /root
-sudo touch /usr/bin/test
-cat ~/persistent_file
 echo &quot;Even rollback changes are persistent&quot; &gt;&gt; ~/persistent_file
 sudo bootc rollback
 sudo bootc status

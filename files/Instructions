@@ -24,6 +24,11 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
     exit
     podman stop bootc
 
+### Examine the kickstart file we will use to build this server
+```
+less /var/www/html/ks/rhel94_imagemode.cfg
+```
+
 ### Create a virtual machine with:
 ```
 ./pxeboot_system.sh
@@ -38,9 +43,9 @@ Once the system is built and reboots, disconnect from the virtual console using 
     uname -r  
     cat /etc/redhat-release  
     rpm -qa | grep example  
-    ip -f inet addr show ens192  
+    ip a  
     timedatectl  
-    df -T / /sysroot *Notice how sysroot now exists*  
+    df -T *Notice how sysroot now exists*  
     id lab-user  
     sudo ls /etc/sudoers.d  
     sudo ls /root  
@@ -69,14 +74,8 @@ Once the system is built and reboots, disconnect from the virtual console using 
     uname -r
     cat /etc/redhat-release
     rpm -qa | grep example
-    ip -f inet addr show ens192
+    ip a
     timedatectl
-    df -T / /sysroot # Notice how sysroot now exists
-    id lab-user
-    sudo ls /etc/sudoers.d
-    sudo ls /root
-    sudo touch /usr/bin/test
-    cat ~/persistent_file
     echo "Even rollback changes are persistent" >> ~/persistent_file
     sudo bootc rollback
     sudo bootc status

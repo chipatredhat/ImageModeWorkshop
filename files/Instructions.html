@@ -1,0 +1,92 @@
+<h3 id="login-to-the-build-server">Login to the build server</h3>
+<p><code>ssh lab-user@&lt;IP_Address&gt;</code> Using redhat as your password ### Examine the file Containerfile-old:</p>
+<pre><code>FROM registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
+RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.noarch.rpm</code></pre>
+<h4 id="this-containerfile-simply-uses-an-older-upstream-bootc-image-so-we-can-update-later-and-adds-an-rpm.-we-are-using-an-rpm-here-that-loads-the-ca-for-our-example.com-domain.-in-real-world-use-this-might-install-an-rpm-that-is-used-to-configure-a-system-with-the-monitoring-hardening-authentication-and-other-baselines-that-are-required-to-deploy-a-system-on-your-network-along-with-any-other-necessary-configuration-items">This Containerfile simply uses an older upstream bootc image (so we can update later) and adds an rpm. We are using an rpm here that loads the CA for our example.com domain. In real world use, this might install an rpm that is used to configure a system with the monitoring, hardening, authentication, and other baselines that are required to deploy a system on your network along with any other necessary configuration items</h4>
+<h3 id="build-a-bootc-container-using-an-older-image-and-tag-it-as-registry.example.comrhel9rhel-bootclatest">Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest</h3>
+<pre><code>podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<h3 id="push-the-bootc-container-to-the-registry">Push the bootc container to the registry</h3>
+<pre><code>podman push registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<h3 id="launch-the-container-to-show-we-can-access-it-as-a-container">Launch the container to show we can access it as a container</h3>
+<pre><code>podman run --rm -d --name bootc registry.example.com/rhel9/rhel-bootc:latest
+podman exec -it bootc /bin/bash
+uname -r
+rpm -qa | grep example
+df -T  ***Note:** no sysroot*
+exit
+podman stop bootc</code></pre>
+<h3 id="create-a-virtual-machine-with">Create a virtual machine with:</h3>
+<pre><code>./pxeboot_system.sh</code></pre>
+<p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>
+<h3 id="ssh-into-your-imagemode-server-using-lab-userredhat">ssh into your imagemode server using lab-user/redhat</h3>
+<p><code>ssh imagemode</code></p>
+<p><em>Investigate the current system</em></p>
+<pre><code>    uname -r  
+    cat /etc/redhat-release  
+    rpm -qa | grep example  
+    ip -f inet addr show ens192  
+    timedatectl  
+    df -T / /sysroot *Notice how sysroot now exists*  
+    id lab-user  
+    sudo ls /etc/sudoers.d  
+    sudo ls /root  
+    sudo touch /usr/bin/test  
+    echo &quot;This file is persistent&quot; &gt; ~/persistent_file  
+    cat ~/persistent_file  
+    sudo bootc status  </code></pre>
+<h3 id="exit-out-of-the-server-build-an-updated-image-and-push-it-to-the-registry">Exit out of the server, build an updated image and push it to the registry</h3>
+<pre><code>podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<h3 id="push-the-bootc-container-to-the-registry-1">Push the bootc container to the registry</h3>
+<pre><code>podman push registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<h3 id="ssh-back-into-your-server-and-do-an-update">ssh back into your server, and do an update</h3>
+<p><code>ssh imagemode</code></p>
+<pre><code>sudo bootc update
+sudo reboot</code></pre>
+<h3 id="ssh-back-into-your-server-show-system-again-show-update-add-to-persistent_file-and-do-a-rollback">ssh back into your server, show system again, show update, add to ~/persistent_file, and do a rollback</h3>
+<p><code>ssh imagemode</code></p>
+<pre><code>sudo bootc status
+uname -r
+cat /etc/redhat-release
+rpm -qa | grep example
+ip -f inet addr show ens192
+timedatectl
+df -T / /sysroot # Notice how sysroot now exists
+id lab-user
+sudo ls /etc/sudoers.d
+sudo ls /root
+sudo touch /usr/bin/test
+cat ~/persistent_file
+echo &quot;Even rollback changes are persistent&quot; &gt;&gt; ~/persistent_file
+sudo bootc rollback
+sudo bootc status
+sudo reboot</code></pre>
+<h3 id="ssh-back-into-your-server-show-the-rollback-and-show-persistent_file">ssh back into your server, show the rollback, and show ~/persistent_file</h3>
+<p><code>ssh imagemode</code></p>
+<pre><code>sudo bootc status
+uname -r
+cat ~/persistent_file</code></pre>
+<h3 id="deploy-a-java-11-application-using-the-base-image-previously-created">Deploy a Java 11 application using the base image previously created</h3>
+<pre><code>podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+podman push registry.example.com/rhel9/rhel-bootc-app:latest
+./pxeboot_system.sh</code></pre>
+<p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>
+<h3 id="ssh-your-application-server-using-lab-userredhat">ssh your application server using lab-user/redhat</h3>
+<p><code>ssh appserver</code></p>
+<p>Populate data in the application so we can show persistence:</p>
+<pre><code>./load_application_data.sh</code></pre>
+<h3 id="you-should-now-be-able-to-access-your-pet-clinic-application-using-the-url-in-the-file-called-application_url.txt">You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt</h3>
+<h3 id="add-some-information-to-your-pet-clinic-application-so-we-can-ensure-we-have-data-persistence-when-we-update-the-system-to-java-17">Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17</h3>
+<h3 id="after-you-have-added-some-data-and-verify-it-was-saved-lets-update-the-system-to-java-17">After you have added some data and verify it was saved, let’s update the system to Java 17</h3>
+<pre><code>podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+podman push registry.example.com/rhel9/rhel-bootc-app:latest</code></pre>
+<h3 id="ssh-back-into-your-application-server-and-update-it.-this-time-we-will-have-bootc-automatically-apply-the-update-and-reboot-after-it-loads.">ssh back into your application server and update it. This time, we will have bootc automatically apply the update and reboot after it loads.</h3>
+<p><code>ssh appserver</code></p>
+<pre><code>sudo bootc update --apply</code></pre>
+<h3 id="visit-your-application-again-and-verify-the-data-you-entered-has-persisted-through-the-upgrade">Visit your application again and verify the data you entered has persisted through the upgrade</h3>
+<h3 id="add-some-new-data-and-lets-do-a-rollback-to-ensure-we-still-maintain-data-persistence-in-a-scenario-where-an-issue-was-discovered-with-the-application-that-requires-a-rollback">Add some new data, and lets do a rollback to ensure we still maintain data persistence in a scenario where an issue was discovered with the application that requires a rollback</h3>
+<h3 id="after-adding-additional-data-and-verifiying-it-was-saved-ssh-back-into-your-application-server-and-do-a-rollback-with">After adding additional data and verifiying it was saved, ssh back into your application server and do a rollback with</h3>
+<p><code>ssh appserver</code></p>
+<pre><code>sudo bootc rollback
+reboot</code></pre>
+<h3 id="after-the-rollback-access-your-application-and-confirm-that-all-data-has-persisted">After the rollback, access your application and confirm that all data has persisted</h3>
+<p>TODO: Convert a package mode installation to image mode once it’s closer to GA</p>

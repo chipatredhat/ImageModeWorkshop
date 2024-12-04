@@ -338,7 +338,7 @@
       src: files/local.repo
       dest: /var/www/html/repo/local.repo
 
-  - name: Login to registry.redhat.io
+  - name: Login to registry.redhat.io as user
     containers.podman.podman_login:
       username: "{{ PMUSERNAME }}"
       password: "{{ PMPASSWORD }}"
@@ -355,16 +355,28 @@
     become: true
     become_user: "{{ USERNAME }}"
 
-  - name: Pull bootc-image-builder
-    containers.podman.podman_image:
-      name: registry.redhat.io/rhel9/bootc-image-builder
-
   - name: Logout of registry.redhat.io
     containers.podman.podman_logout:
       registry: registry.redhat.io
     become: true
     become_user: "{{ USERNAME }}"
 
+  - name: Login to registry.redhat.io as root
+    containers.podman.podman_login:
+      username: "{{ PMUSERNAME }}"
+      password: "{{ PMPASSWORD }}"
+      registry: registry.redhat.io
+    become: true
+
+  - name: Pull bootc-image-builder
+    containers.podman.podman_image:
+      name: registry.redhat.io/rhel9/bootc-image-builder
+    become: true
+
+  - name: Logout of registry.redhat.io
+    containers.podman.podman_logout:
+      registry: registry.redhat.io
+    become: true
 
   - name: Write out URL where you can access the application
     ansible.builtin.lineinfile:

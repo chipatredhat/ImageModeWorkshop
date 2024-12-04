@@ -1,0 +1,14 @@
+[customizations.timezone]
+timezone = "America/Los_Angeles"
+
+[customizations]
+hostname = "baseimage.example.com"
+partitioning_mode = "lvm"
+
+[[customizations.user]]
+name = "lab-user"
+password = "redhat"
+groups = ["wheel"]
+
+[customizations.services]
+enabled = ["sshd"]

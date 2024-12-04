@@ -355,7 +355,7 @@
     become: true
     become_user: "{{ USERNAME }}"
 
-  - name: Logout of registry.redhat.io
+  - name: Logout of registry.redhat.io as user
     containers.podman.podman_logout:
       registry: registry.redhat.io
     become: true
@@ -370,10 +370,10 @@
 
   - name: Pull bootc-image-builder
     containers.podman.podman_image:
-      name: registry.redhat.io/rhel9/bootc-image-builder
+      name: registry.redhat.io/rhel9/bootc-image-builder:latest
     become: true
 
-  - name: Logout of registry.redhat.io
+  - name: Logout of registry.redhat.io as root
     containers.podman.podman_logout:
       registry: registry.redhat.io
     become: true

@@ -282,6 +282,7 @@
     with_items: 
       - "{{ WSDIR }}"
       - "{{ IMFILES }}"
+      - "{{ WSDIR }}/output"
 
   - name: Copy Containerfile-old to the workshop directory
     ansible.builtin.copy:
@@ -345,7 +346,7 @@
     become: true
     become_user: "{{ USERNAME }}"
 
-  - name: Pull images
+  - name: Pull bootc images
     containers.podman.podman_image:
       name: "{{ item }}"
     with_items:
@@ -353,6 +354,10 @@
       - registry.redhat.io/rhel9/rhel-bootc:latest
     become: true
     become_user: "{{ USERNAME }}"
+
+  - name: Pull bootc-image-builder
+    containers.podman.podman_image:
+      name: registry.redhat.io/rhel9/bootc-image-builder
 
   - name: Logout of registry.redhat.io
     containers.podman.podman_logout:

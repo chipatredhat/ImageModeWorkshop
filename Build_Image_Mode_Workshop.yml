@@ -402,7 +402,29 @@
     ansible.builtin.copy:
       src: files/petclinic.sql
       dest: /var/www/html/petclinic/petclinic.sql
-   
+
+  - name: Copy kickstart_config.toml
+    ansible.builtin.copy:
+      src: files/kickstart_config.toml
+      dest: "{{ WSDIR }}/kickstart_config.toml"
+      owner: "{{ USERNAME }}"
+      group: users
+
+  - name: Copy config.toml
+    ansible.builtin.copy:
+      src: files/config.toml
+      dest: "{{ WSDIR }}/config.toml"
+      owner: "{{ USERNAME }}"
+      group: users
+
+  - name: Copy build_image.sh
+    ansible.builtin.copy:
+      src: files/build_image.sh
+      dest: "{{ WSDIR }}/build_image.sh"
+      mode: '0755'
+      owner: "{{ USERNAME }}"
+      group: users
+
   - name: Start haproxy
     ansible.builtin.systemd_service:
       state: started

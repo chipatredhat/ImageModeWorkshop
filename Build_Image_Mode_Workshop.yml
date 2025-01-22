@@ -371,6 +371,7 @@
     with_items:
       - registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
       - registry.redhat.io/rhel9/rhel-bootc:9.4
+      - registry.redhat.io/rhel10-beta/rhel-bootc@sha256:6d350595f1c59bee7b7464742ce87d251fee2889e20e13b17889dc34238ec442
     become: true
     become_user: "{{ USERNAME }}"
 

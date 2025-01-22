@@ -331,6 +331,13 @@
       owner: "{{ USERNAME }}"
       group: users
 
+  - name: Copy Containerfile-rhel10-app-21 to the workshop directory
+    ansible.builtin.copy:
+      src: files/Containerfile-rhel10-app-21
+      dest: "{{ WSDIR }}/Containerfile-rhel10-app-21"
+      owner: "{{ USERNAME }}"
+      group: users
+      
   - name: Copy Instructions to the user directory
     ansible.builtin.copy:
       src: files/Instructions

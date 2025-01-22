@@ -28,16 +28,17 @@ fi
 # Get a download token:
 token=$(curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=rhsm-api -d refresh_token=$offline_token | jq --raw-output .access_token)
 # Use the Red Hat Enterprise Linux 9.4 Binary DVD SHA-256 Checksum from https://access.redhat.com/downloads/content/rhel
-#RHEL94="17b013f605e6b85affd37431b533b6904541f8b889179ae3f99e1e480dd4ae38" # Boot.iso
 RHEL94="398561d7b66f1a4bf23664f4aa8f2cfbb3641aa2f01a320068e86bd1fc0e9076" # Binary DVD
+RHEL10="f837ceb4e481aa630f83b2151bb41c9fa5043b1460305d52a0e00646466ed4ac"
 # Download the ISO:
 sudo mkdir /mnt/iso
 sudo chmod 777 /mnt/iso
 # Boot.iso:
 # curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL94/download -o /mnt/iso/rhel-9.4-x86_64-boot.iso
-# Binary DVD:
+# RHEL 9.4 Binary DVD:
 curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL94/download -o /mnt/iso/rhel-9.4-x86_64-dvd.iso
-
+# RHEL 10 Beta DVD
+curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL10/download -o /mnt/iso/rhel-10.0-beta-x86_64-dvd.iso
 
 # Install ansible-galaxy requirements
 ansible-galaxy install -r files/requirements.yml

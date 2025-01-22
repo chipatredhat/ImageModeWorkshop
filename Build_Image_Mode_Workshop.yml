@@ -310,6 +310,13 @@
       owner: "{{ USERNAME }}"
       group: users
 
+  - name: Copy local10.repo to the files directory
+    ansible.builtin.copy:
+      src: files/local10.repo
+      dest: "{{ IMFILES }}/local10.repo"
+      owner: "{{ USERNAME }}"
+      group: users
+
   - name: Copy application to the files directory
     ansible.builtin.copy:
       src: files/spring-petclinic-2.3.0.BUILD-SNAPSHOT.jar
@@ -337,7 +344,7 @@
       dest: "{{ WSDIR }}/Containerfile-rhel10-app-21"
       owner: "{{ USERNAME }}"
       group: users
-      
+
   - name: Copy Instructions to the user directory
     ansible.builtin.copy:
       src: files/Instructions

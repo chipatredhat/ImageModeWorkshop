@@ -90,6 +90,7 @@ Once the system is built and reboots, disconnect from the virtual console using 
 
 ### Deploy a Java 11 application using the base image previously created
 ```
+cat Containerfile-app-11
 podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ./pxeboot_system.sh
@@ -104,12 +105,18 @@ Populate data in the application so we can show persistence:
 ./load_application_data.sh
 ```
 
+Check the java version:
+```
+java --version
+```
+
 ### You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt
 
 ### Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17
 
 ### After you have added some data and verify it was saved, let's update the system to Java 17
 ```
+cat Containerfile-app-17
 podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ```
@@ -125,10 +132,16 @@ sudo bootc update --apply
 
 ### Add some new data, and lets do a rollback to ensure we still maintain data persistence in a scenario where an issue was discovered with the application that requires a rollback
 
-### After adding additional data and verifiying it was saved, ssh back into your application server and do a rollback with
-``` ssh appserver```
-
+### After adding additional data and verifiying it was saved, ssh back into your application server, verify the java version and do a rollback with
+``` 
+ssh appserver
 ```
+
+Check the java version:
+```
+java --version
+```
+
 sudo bootc rollback
 reboot
 ```

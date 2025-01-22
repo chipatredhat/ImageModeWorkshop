@@ -62,7 +62,8 @@ sudo reboot</code></pre>
 uname -r
 cat ~/persistent_file</code></pre>
 <h3 id="deploy-a-java-11-application-using-the-base-image-previously-created">Deploy a Java 11 application using the base image previously created</h3>
-<pre><code>podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+<pre><code>cat Containerfile-app-11
+podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
 podman push registry.example.com/rhel9/rhel-bootc-app:latest
 ./pxeboot_system.sh</code></pre>
 <p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>
@@ -70,19 +71,23 @@ podman push registry.example.com/rhel9/rhel-bootc-app:latest
 <p><code>ssh appserver</code></p>
 <p>Populate data in the application so we can show persistence:</p>
 <pre><code>./load_application_data.sh</code></pre>
+<p>Check the java version:</p>
+<pre><code>java --version</code></pre>
 <h3 id="you-should-now-be-able-to-access-your-pet-clinic-application-using-the-url-in-the-file-called-application_url.txt">You should now be able to access your Pet Clinic application using the URL in the file called Application_URL.txt</h3>
 <h3 id="add-some-information-to-your-pet-clinic-application-so-we-can-ensure-we-have-data-persistence-when-we-update-the-system-to-java-17">Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17</h3>
 <h3 id="after-you-have-added-some-data-and-verify-it-was-saved-lets-update-the-system-to-java-17">After you have added some data and verify it was saved, let’s update the system to Java 17</h3>
-<pre><code>podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
+<pre><code>cat Containerfile-app-17
+podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
 podman push registry.example.com/rhel9/rhel-bootc-app:latest</code></pre>
 <h3 id="ssh-back-into-your-application-server-and-update-it.-this-time-we-will-have-bootc-automatically-apply-the-update-and-reboot-after-it-loads.">ssh back into your application server and update it. This time, we will have bootc automatically apply the update and reboot after it loads.</h3>
 <p><code>ssh appserver</code></p>
 <pre><code>sudo bootc update --apply</code></pre>
 <h3 id="visit-your-application-again-and-verify-the-data-you-entered-has-persisted-through-the-upgrade">Visit your application again and verify the data you entered has persisted through the upgrade</h3>
 <h3 id="add-some-new-data-and-lets-do-a-rollback-to-ensure-we-still-maintain-data-persistence-in-a-scenario-where-an-issue-was-discovered-with-the-application-that-requires-a-rollback">Add some new data, and lets do a rollback to ensure we still maintain data persistence in a scenario where an issue was discovered with the application that requires a rollback</h3>
-<h3 id="after-adding-additional-data-and-verifiying-it-was-saved-ssh-back-into-your-application-server-and-do-a-rollback-with">After adding additional data and verifiying it was saved, ssh back into your application server and do a rollback with</h3>
-<p><code>ssh appserver</code></p>
-<pre><code>sudo bootc rollback
-reboot</code></pre>
+<h3 id="after-adding-additional-data-and-verifiying-it-was-saved-ssh-back-into-your-application-server-verify-the-java-version-and-do-a-rollback-with">After adding additional data and verifiying it was saved, ssh back into your application server, verify the java version and do a rollback with</h3>
+<pre><code>ssh appserver</code></pre>
+<p>Check the java version:</p>
+<pre><code>java --version</code></pre>
+<p>sudo bootc rollback reboot ```</p>
 <h3 id="after-the-rollback-access-your-application-and-confirm-that-all-data-has-persisted">After the rollback, access your application and confirm that all data has persisted</h3>
 <p>TODO: Convert a package mode installation to image mode once it’s closer to GA</p>

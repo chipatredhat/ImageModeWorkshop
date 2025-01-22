@@ -268,6 +268,11 @@
       src: files/rhel94_imagemodeapp.cfg
       dest: /var/www/html/ks/rhel94_imagemodeapp.cfg
 
+  - name: Copy Instructions.html to /var/www/html
+    ansible.builtin.copy:
+      src: files/Instructions.html
+      dest: /var/www/html/Instructions.html
+      
   - name: Install the example.com CA rpm so we can push to the registry
     ansible.builtin.yum:
       name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
@@ -351,7 +356,7 @@
       name: "{{ item }}"
     with_items:
       - registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
-      - registry.redhat.io/rhel9/rhel-bootc:latest
+      - registry.redhat.io/rhel9/rhel-bootc:9.4
     become: true
     become_user: "{{ USERNAME }}"
 

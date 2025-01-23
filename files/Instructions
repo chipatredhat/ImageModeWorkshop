@@ -137,16 +137,52 @@ sudo bootc update --apply
 ssh appserver
 ```
 
-Check the java version:
+### Check the java version:
 ```
 java --version
 ```
 
+### Now rollback the sysetem and reboot:
+```
 sudo bootc rollback
 reboot
 ```
 
 ### After the rollback, access your application and confirm that all data has persisted
 
-TODO:
-  Convert a package mode installation to image mode once it's closer to GA
+### Now lets upgrade our application server to RHEL 10:
+```
+cat Containerfile-rhel10-app-21
+podman build -f  Containerfile-rhel10-app-21 --tag registry.example.com/rhel10/rhel-bootc-app:latest
+podman push registry.example.com/rhel10/rhel-bootc-app:latest
+```
+
+### ssh into the appserver and switch the image to your new RHEL 10 image
+```
+ssh appserver
+sudo bootc switch registry.example.com/rhel10/rhel-bootc-app:latest
+sudo reboot
+```
+
+### Once the server has completed booting, lets verify it is now running RHEL 10:
+```
+ssh appserver
+cat /etc/redhat-release
+java --version
+```
+
+### Check that your application has persisted all of your data, and add another record.  Once this is done, let's rollback to RHEL 9:
+```
+ssh appserver
+sudo bootc rollback
+sudo reboot
+```
+
+### Once the appserver has completed booting, verify the records you added to the application exist, then take a look at the system to confirm it has rolled back to RHEL 9:
+```
+ssh appserver
+cat /etc/redhat-release
+java --version
+```
+
+## This completes our workshop.  Feel free to experiment with the images.  By running pxeboot_system, it will give you the option to delete the existing vm and create a new one from scratch.

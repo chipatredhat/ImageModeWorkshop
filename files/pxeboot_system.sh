@@ -15,6 +15,7 @@ function vm_exists {
     then
     echo -e "\ndeleting vm...\n"
     sudo virsh destroy $1 && sudo virsh undefine $1 --remove-all-storage
+    sed -i "/^$1.*/Id" ~/.ssh/known_hosts
     create_vm $1 $2
     else
     echo -e "\nexiting\n"

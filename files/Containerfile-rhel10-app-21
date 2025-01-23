@@ -2,6 +2,7 @@ FROM registry.redhat.io/rhel10-beta/rhel-bootc:latest
 COPY files/local10.repo /etc/yum.repos.d/local10.repo
 RUN dnf install -y java-21-openjdk.x86_64 mariadb-server
 RUN systemctl enable mariadb
+RUN systemctl disable kdump
 COPY files/*.jar /opt/spring-petclinic.jar
 COPY files/petclinic.service /usr/lib/systemd/system/petclinic.service
 RUN systemctl enable petclinic

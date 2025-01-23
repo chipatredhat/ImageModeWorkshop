@@ -3,7 +3,6 @@ COPY files/local.repo /etc/yum.repos.d/local.repo
 RUN dnf install -y java-17-openjdk.x86_64
 RUN dnf module install -y mariadb:10.11/server
 RUN systemctl enable mariadb
-RUN systemctl disable kdump
 RUN ln -s /usr/lib/jvm/jre-17-openjdk-17.0.10.0.7-2.el9.x86_64/bin/java /usr/bin/java
 COPY files/*.jar /opt/spring-petclinic.jar
 COPY files/petclinic.service /usr/lib/systemd/system/petclinic.service

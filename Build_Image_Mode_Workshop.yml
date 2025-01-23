@@ -16,7 +16,8 @@
     REPONAME: "repo"
     KSSERVER: "kickstart"
     REGISTRYDIR: /root/registry
-    ISONAME: rhel-9.4-x86_64-dvd.iso # rhel-9.4-x86_64-boot.iso
+    ISO9NAME: rhel-9.4-x86_64-dvd.iso
+    ISO10NAME: rhel-10.0-beta-x86_64-dvd.iso
     WSDIR: /home/{{ USERNAME }}/Workshop
     IMFILES: "{{ WSDIR }}/files"
 
@@ -218,14 +219,23 @@
       - /var/www/html/repo
       - /var/www/html/ks
       - /var/www/html/rhel94
+      - /var/www/html/rhel10
       - /var/www/html/pxe/rhel94
       - /var/www/html/pxe/pxelinux.cfg
       - /var/www/html/petclinic
 
-  - name: Mount DVD to /var/www/html/rhel94
+  - name: Mount RHEL 9.4 DVD to /var/www/html/rhel94
     mount:
       path: /var/www/html/rhel94
-      src: /mnt/iso/{{ ISONAME }}
+      src: /mnt/iso/{{ ISO9NAME }}
+      fstype: iso9660
+      opts: ro
+      state: mounted
+
+  - name: Mount RHEL 10 DVD to /var/www/html/rhel10
+    mount:
+      path: /var/www/html/rhel10
+      src: /mnt/iso/{{ ISO10NAME }}
       fstype: iso9660
       opts: ro
       state: mounted

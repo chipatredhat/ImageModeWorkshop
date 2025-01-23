@@ -1,6 +1,7 @@
 FROM registry.example.com/rhel9/rhel-bootc:latest
 COPY files/local.repo /etc/yum.repos.d/local.repo
-RUN dnf install -y java-11-openjdk.x86_64 mariadb-server
+RUN dnf install -y java-11-openjdk.x86_64
+RUN dnf module install -y mariadb:10.11/server
 RUN systemctl enable mariadb
 RUN ln -s /usr/lib/jvm/java-11-openjdk-11.0.22.0.7-2.el9.x86_64/bin/java /usr/bin/java
 COPY files/*.jar /opt/spring-petclinic.jar

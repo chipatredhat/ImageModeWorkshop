@@ -38,7 +38,7 @@ sudo chmod 777 /mnt/iso
 # RHEL 9.4 Binary DVD:
 curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL94/download -o /mnt/iso/rhel-9.4-x86_64-dvd.iso
 # RHEL 10 Beta DVD
-curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL10/download -o /mnt/iso/rhel-10.0-beta-x86_64-dvd.iso
+curl -H "Authorization: Bearer $token" -L https://api.access.redhat.com/management/v1/images/$RHEL10/download -o /mnt/iso/rhel-10.0-x86_64-dvd.iso
 
 # Install ansible-galaxy requirements
 ansible-galaxy install -r files/requirements.yml

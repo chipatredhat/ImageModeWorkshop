@@ -29,7 +29,7 @@ fi
 token=$(curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=rhsm-api -d refresh_token=$offline_token | jq --raw-output .access_token)
 # Use the Red Hat Enterprise Linux 9.4 Binary DVD SHA-256 Checksum from https://access.redhat.com/downloads/content/rhel
 RHEL94="398561d7b66f1a4bf23664f4aa8f2cfbb3641aa2f01a320068e86bd1fc0e9076" # Binary DVD
-RHEL10="008eff6d005e0e418da2dc06ad323f099e02749f32d8074593abdeae4763a0fb"
+RHEL10="edce2dd6f8e1d1b2ff0b204f89b0659bc9e320d175beb7caad60712957a19608"
 # Download the ISO:
 sudo mkdir /mnt/iso
 sudo chmod 777 /mnt/iso

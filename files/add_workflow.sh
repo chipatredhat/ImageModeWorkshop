@@ -32,4 +32,6 @@ sudo restorecon /usr/local/bin/gitea
 sudo cp /tmp/ImageModeWorkshop/files/gitea.service /etc/systemd/system/gitea.service
 sudo systemctl daemon-reload
 sudo systemctl enable gitea --now
+echo "Sleeping 30 seconds to allow gitea to startup"
+sleep 30
 sudo -u git /usr/local/bin/gitea admin user create --username lab-user --password redhat --email lab-user@example.com --must-change-password=false --config /etc/gitea/app.ini 

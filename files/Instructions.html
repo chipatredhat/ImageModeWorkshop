@@ -3,12 +3,12 @@
 <pre><code>FROM registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
 RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.noarch.rpm</code></pre>
 <h4 id="this-containerfile-simply-uses-an-older-upstream-bootc-image-so-we-can-update-later-and-adds-an-rpm.-we-are-using-an-rpm-here-that-loads-the-ca-for-our-example.com-domain.-in-real-world-use-this-might-install-an-rpm-that-is-used-to-configure-a-system-with-the-monitoring-hardening-authentication-and-other-baselines-that-are-required-to-deploy-a-system-on-your-network-along-with-any-other-necessary-configuration-items">This Containerfile simply uses an older upstream bootc image (so we can update later) and adds an rpm. We are using an rpm here that loads the CA for our example.com domain. In real world use, this might install an rpm that is used to configure a system with the monitoring, hardening, authentication, and other baselines that are required to deploy a system on your network along with any other necessary configuration items</h4>
-<h3 id="build-a-bootc-container-using-an-older-image-and-tag-it-as-registry.example.comrhel9rhel-bootclatest">Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest</h3>
-<pre><code>podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<h3 id="build-a-bootc-container-using-an-older-image-and-tag-it-as-registry.example.com:5000rhel9rhel-bootclatest">Build a bootc container using an older image and tag it as registry.example.com:5000/rhel9/rhel-bootc:latest</h3>
+<pre><code>podman build -f Containerfile-old --tag registry.example.com:5000/rhel9/rhel-bootc:latest</code></pre>
 <h3 id="push-the-bootc-container-to-the-registry">Push the bootc container to the registry</h3>
-<pre><code>podman push registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<pre><code>podman push registry.example.com:5000/rhel9/rhel-bootc:latest</code></pre>
 <h3 id="launch-the-container-to-show-we-can-access-it-as-a-container">Launch the container to show we can access it as a container</h3>
-<pre><code>podman run --rm -d --name bootc registry.example.com/rhel9/rhel-bootc:latest
+<pre><code>podman run --rm -d --name bootc registry.example.com:5000/rhel9/rhel-bootc:latest
 podman exec -it bootc /bin/bash
 uname -r
 rpm -qa | grep example
@@ -37,9 +37,9 @@ podman stop bootc</code></pre>
     cat ~/persistent_file  
     sudo bootc status  </code></pre>
 <h3 id="exit-out-of-the-server-build-an-updated-image-and-push-it-to-the-registry">Exit out of the server, build an updated image and push it to the registry</h3>
-<pre><code>podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<pre><code>podman build -f Containerfile-new --tag registry.example.com:5000/rhel9/rhel-bootc:latest</code></pre>
 <h3 id="push-the-bootc-container-to-the-registry-1">Push the bootc container to the registry</h3>
-<pre><code>podman push registry.example.com/rhel9/rhel-bootc:latest</code></pre>
+<pre><code>podman push registry.example.com:5000/rhel9/rhel-bootc:latest</code></pre>
 <h3 id="ssh-back-into-your-server-and-do-an-update">ssh back into your server, and do an update</h3>
 <p><code>ssh imagemode</code></p>
 <pre><code>sudo bootc update
@@ -63,8 +63,8 @@ uname -r
 cat ~/persistent_file</code></pre>
 <h3 id="deploy-a-java-11-application-using-the-base-image-previously-created">Deploy a Java 11 application using the base image previously created</h3>
 <pre><code>cat Containerfile-app-11
-podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
-podman push registry.example.com/rhel9/rhel-bootc-app:latest
+podman build -f Containerfile-app-11 --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest
 ./pxeboot_system.sh</code></pre>
 <p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>
 <h3 id="ssh-your-application-server-using-lab-userredhat">ssh your application server using lab-user/redhat</h3>
@@ -77,8 +77,8 @@ podman push registry.example.com/rhel9/rhel-bootc-app:latest
 <h3 id="add-some-information-to-your-pet-clinic-application-so-we-can-ensure-we-have-data-persistence-when-we-update-the-system-to-java-17">Add some information to your Pet Clinic application so we can ensure we have data persistence when we update the system to Java 17</h3>
 <h3 id="after-you-have-added-some-data-and-verify-it-was-saved-lets-update-the-system-to-java-17">After you have added some data and verify it was saved, let’s update the system to Java 17</h3>
 <pre><code>cat Containerfile-app-17
-podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
-podman push registry.example.com/rhel9/rhel-bootc-app:latest</code></pre>
+podman build -f Containerfile-app-17 --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest</code></pre>
 <h3 id="ssh-back-into-your-application-server-and-update-it.-this-time-we-will-have-bootc-automatically-apply-the-update-and-reboot-after-it-loads.">ssh back into your application server and update it. This time, we will have bootc automatically apply the update and reboot after it loads.</h3>
 <p><code>ssh appserver</code></p>
 <pre><code>sudo bootc update --apply</code></pre>
@@ -94,11 +94,11 @@ reboot</code></pre>
 <h3 id="after-the-rollback-access-your-application-and-confirm-that-all-data-has-persisted">After the rollback, access your application and confirm that all data has persisted</h3>
 <h3 id="now-lets-upgrade-our-application-server-to-rhel-10">Now lets upgrade our application server to RHEL 10:</h3>
 <pre><code>cat Containerfile-rhel10-app-21
-podman build -f  Containerfile-rhel10-app-21 --tag registry.example.com/rhel10/rhel-bootc-app:latest
-podman push registry.example.com/rhel10/rhel-bootc-app:latest</code></pre>
+podman build -f  Containerfile-rhel10-app-21 --tag registry.example.com:5000/rhel10/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel10/rhel-bootc-app:latest</code></pre>
 <h3 id="ssh-into-the-appserver-and-switch-the-image-to-your-new-rhel-10-image">ssh into the appserver and switch the image to your new RHEL 10 image</h3>
 <pre><code>ssh appserver
-sudo bootc switch registry.example.com/rhel10/rhel-bootc-app:latest
+sudo bootc switch registry.example.com:5000/rhel10/rhel-bootc-app:latest
 sudo reboot</code></pre>
 <h3 id="once-the-server-has-completed-booting-lets-verify-it-is-now-running-rhel-10">Once the server has completed booting, lets verify it is now running RHEL 10:</h3>
 <pre><code>ssh appserver

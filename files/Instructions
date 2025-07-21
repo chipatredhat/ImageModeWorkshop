@@ -9,14 +9,14 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
 ```
 #### This Containerfile simply uses an older upstream bootc image (so we can update later) and adds an rpm.  We are using an rpm here that loads the CA for our example.com domain.  In real world use, this might install an rpm that is used to configure a system with the monitoring, hardening, authentication, and other baselines that are required to deploy a system on your network along with any other necessary configuration items
 
-### Build a bootc container using an older image and tag it as registry.example.com/rhel9/rhel-bootc:latest
-    podman build -f Containerfile-old --tag registry.example.com/rhel9/rhel-bootc:latest
+### Build a bootc container using an older image and tag it as registry.example.com:5000/rhel9/rhel-bootc:latest
+    podman build -f Containerfile-old --tag registry.example.com:5000/rhel9/rhel-bootc:latest
 
 ### Push the bootc container to the registry
-    podman push registry.example.com/rhel9/rhel-bootc:latest
+    podman push registry.example.com:5000/rhel9/rhel-bootc:latest
 
 ### Launch the container to show we can access it as a container
-    podman run --rm -d --name bootc registry.example.com/rhel9/rhel-bootc:latest
+    podman run --rm -d --name bootc registry.example.com:5000/rhel9/rhel-bootc:latest
     podman exec -it bootc /bin/bash
     uname -r
     rpm -qa | grep example
@@ -56,10 +56,10 @@ Once the system is built and reboots, disconnect from the virtual console using 
 ```
 
 ### Exit out of the server, build an updated image and push it to the registry
-    podman build -f Containerfile-new --tag registry.example.com/rhel9/rhel-bootc:latest
+    podman build -f Containerfile-new --tag registry.example.com:5000/rhel9/rhel-bootc:latest
 
 ### Push the bootc container to the registry
-    podman push registry.example.com/rhel9/rhel-bootc:latest
+    podman push registry.example.com:5000/rhel9/rhel-bootc:latest
 
 ### ssh back into your server, and do an update
 ```ssh imagemode```
@@ -91,8 +91,8 @@ Once the system is built and reboots, disconnect from the virtual console using 
 ### Deploy a Java 11 application using the base image previously created
 ```
 cat Containerfile-app-11
-podman build -f Containerfile-app-11 --tag registry.example.com/rhel9/rhel-bootc-app:latest
-podman push registry.example.com/rhel9/rhel-bootc-app:latest
+podman build -f Containerfile-app-11 --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest
 ./pxeboot_system.sh
 ```
 Once the system is built and reboots, disconnect from the virtual console using Ctrl-]
@@ -117,8 +117,8 @@ java --version
 ### After you have added some data and verify it was saved, let's update the system to Java 17
 ```
 cat Containerfile-app-17
-podman build -f Containerfile-app-17 --tag registry.example.com/rhel9/rhel-bootc-app:latest
-podman push registry.example.com/rhel9/rhel-bootc-app:latest
+podman build -f Containerfile-app-17 --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest
 ```
 
 ### ssh back into your application server and update it.  This time, we will have bootc automatically apply the update and reboot after it loads.
@@ -153,14 +153,14 @@ reboot
 ### Now lets upgrade our application server to RHEL 10:
 ```
 cat Containerfile-rhel10-app-21
-podman build -f  Containerfile-rhel10-app-21 --tag registry.example.com/rhel10/rhel-bootc-app:latest
-podman push registry.example.com/rhel10/rhel-bootc-app:latest
+podman build -f  Containerfile-rhel10-app-21 --tag registry.example.com:5000/rhel10/rhel-bootc-app:latest
+podman push registry.example.com:5000/rhel10/rhel-bootc-app:latest
 ```
 
 ### ssh into the appserver and switch the image to your new RHEL 10 image
 ```
 ssh appserver
-sudo bootc switch registry.example.com/rhel10/rhel-bootc-app:latest
+sudo bootc switch registry.example.com:5000/rhel10/rhel-bootc-app:latest
 sudo reboot
 ```
 

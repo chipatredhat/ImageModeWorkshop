@@ -46,9 +46,9 @@ for REPO in rhel9-soe petclinic rhel10-soe ; do
 curl   -X POST "http://localhost:3000/api/v1/user/repos"   -H "accept: application/json"   -H "Authorization: token ${GITEA_USER_TOKEN}"   -H "Content-Type: application/json"   -d "{\"name\": \"${REPO}\"}" -i 
 git clone http://localhost:3000/lab-user/${REPO}.git
 done
-cp /tmp/ImageModeWorkshop/files/Containerfile-new ~/git/rhel9-soe/Containerfile
-cp /tmp/ImageModeWorkshop/files/Containerfile-rhel10-app-21 ~/git/rhel10-soe/Containerfile
-cp /tmp/ImageModeWorkshop/files/Containerfile-app-17 ~/git/petclinic/Containerfile
+#cp /tmp/ImageModeWorkshop/files/Containerfile-new ~/git/rhel9-soe/Containerfile
+#cp /tmp/ImageModeWorkshop/files/Containerfile-rhel10-app-21 ~/git/rhel10-soe/Containerfile
+#cp /tmp/ImageModeWorkshop/files/Containerfile-app-17 ~/git/petclinic/Containerfile
 for REPO in rhel9-soe petclinic rhel10-soe ; do
 cd ~/git/${REPO}
 git add .
@@ -56,11 +56,11 @@ git commit -m "Initial commit"
 git remote set-url origin http://${GITEA_USER_TOKEN}@localhost:3000/lab-user/${REPO}.git
 git push ; done
 # Generate a runner token:
-GITEA_RUNNER_TOKEN=$(sudo -u git /usr/local/bin/gitea actions generate-runner-token --config /etc/gitea/app.ini)
+#GITEA_RUNNER_TOKEN=$(sudo -u git /usr/local/bin/gitea actions generate-runner-token --config /etc/gitea/app.ini)
 # Get and register a runner:
 CURRENT_RUNNER=$(curl -s https://dl.gitea.com/act_runner/ | grep href | grep name | head -1 | cut -d "/" -f 3)
-curl -s https://dl.gitea.com/act_runner/${CURRENT_RUNNER}/act_runner-${CURRENT_RUNNER}-linux-amd64 -o act_runner
-chmod +x act_runner
-sudo mv act_runner ~
-sudo chown root:root ~/act_runner
-sudo ~/act_runner register --no-interactive --instance http://localhost:3000 --token ${GITEA_RUNNER_TOKEN}
+sudo curl -s https://dl.gitea.com/act_runner/${CURRENT_RUNNER}/act_runner-${CURRENT_RUNNER}-linux-amd64 -o /root/act_runner
+chmod +x /root/act_runner
+#sudo mv act_runner ~
+#sudo chown root:root ~/act_runner
+#sudo ~/act_runner register --no-interactive --instance http://localhost:3000 --token ${GITEA_RUNNER_TOKEN}

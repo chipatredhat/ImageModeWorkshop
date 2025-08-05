@@ -9,7 +9,7 @@ cd novnc/ansible && ansible-playbook install_novnc_and_tigervnc-server.yml
 # Install VSCode:
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-sudo dnf -y install code
+sudo dnf -y install code podman-docker # Added podman-docker as it's needed for the runner below
 
 # Install Gitea:
 sudo groupadd --system git
@@ -55,12 +55,33 @@ git add .
 git commit -m "Initial commit"
 git remote set-url origin http://${GITEA_USER_TOKEN}@localhost:3000/lab-user/${REPO}.git
 git push ; done
-# Generate a runner token:
-#GITEA_RUNNER_TOKEN=$(sudo -u git /usr/local/bin/gitea actions generate-runner-token --config /etc/gitea/app.ini)
-# Get and register a runner:
+
+### Install the runner:
+# Get a runner:
 CURRENT_RUNNER=$(curl -s https://dl.gitea.com/act_runner/ | grep href | grep name | head -1 | cut -d "/" -f 3)
 sudo curl -s https://dl.gitea.com/act_runner/${CURRENT_RUNNER}/act_runner-${CURRENT_RUNNER}-linux-amd64 -o /root/act_runner
 chmod +x /root/act_runner
-#sudo mv act_runner ~
-#sudo chown root:root ~/act_runner
-#sudo ~/act_runner register --no-interactive --instance http://localhost:3000 --token ${GITEA_RUNNER_TOKEN}
+# Setup the environment:
+sudo useradd act-runner -d /var/lib/act-runner
+sudo loginctl enable-linger act-runner
+sudo cp /root/act_runner /usr/local/bin/act-runner
+sudo mkdir /etc/act-runner
+sudo chown root:act-runner /etc/act-runner
+sudo chmod 770 /etc/act-runner
+sudo chown root:act-runner /usr/local/bin/act-runner
+sudo chmod ug+x /usr/local/bin/act-runner
+# Configure the runner:
+sudo /usr/local/bin/act-runner generate-config | grep -v "^  #" | sudo tee -a /etc/act-runner/config.yaml
+sudo chown root:act-runner /etc/act-runner/config.yaml
+sudo chmod 640 /etc/act-runner/config.yaml
+sudo sed -i "s/.runner/\/var\/lib\/act-runner\/.runner/" /etc/act-runner/config.yaml
+sudo sed -i "s/docker_host.*/docker_host: \"unix:\/\/\/run\/podman\/podman.sock\"/" /etc/act-runner/config.yaml
+curl https://raw.githubusercontent.com/nodiscc/xsrv/refs/heads/master/roles/gitea_act_runner/templates/etc_systemd_system_act-runner.service.j2 | sudo tee -a /etc/systemd/system/act-runner.service
+sudo systemctl daemon-reload
+# Register the runner:
+sudo -u act-runner /usr/local/bin/act-runner register -c /etc/act-runner/config.yaml --no-interactive --instance http://localhost:3000 --token $(sudo -u git /usr/local/bin/gitea actions generate-runner-token --config /etc/gitea/app.ini)
+# Start the runner:
+sudo systemctl enable podman.socket --now
+sudo chgrp act-runner /run/podman/podman.sock
+sudo chmod g+x /run/podman/podman.sock
+sudo systemctl enable act-runner --now

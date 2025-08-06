@@ -74,7 +74,7 @@ sudo chmod ug+x /usr/local/bin/act-runner
 sudo /usr/local/bin/act-runner generate-config | grep -v "^  #" | sudo tee -a /etc/act-runner/config.yaml
 sudo chown root:act-runner /etc/act-runner/config.yaml
 sudo chmod 640 /etc/act-runner/config.yaml
-sudo sed -i "s/.runner/\/var\/lib\/act-runner\/.runner/" /etc/act-runner/config.yaml
+#sudo sed -i "s/.runner/\/var\/lib\/act-runner\/.runner/" /etc/act-runner/config.yaml
 sudo sed -i "s/docker_host.*/docker_host: \"unix:\/\/\/run\/podman\/podman.sock\"/" /etc/act-runner/config.yaml
 curl https://raw.githubusercontent.com/nodiscc/xsrv/refs/heads/master/roles/gitea_act_runner/templates/etc_systemd_system_act-runner.service.j2 | sudo tee -a /etc/systemd/system/act-runner.service
 sudo systemctl daemon-reload

@@ -1,0 +1,31 @@
+name: Build and Push RHEL 9 SOE Image
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Add entries to /etc/hosts
+      run: echo "192.168.122.1 kickstart registry registry.example.com kickstart.example.com" >> /etc/hosts
+      
+    - name: Get CA and install it
+      run: curl http://kickstart.example.com/ca.example.com.crt -o /etc/ssl/certs/ca.example.com.crt && update-ca-certificates
+
+    - name: Clone repository
+      uses: actions/checkout@v4 # https://github.com/actions/checkout
+     
+    - name: Build and push container
+      uses: docker/build-push-action@v2
+      with: 
+        context: .
+        file: ./Containerfile
+        push: true
+        tags: registry.example.com:5000/rhel9/rhel9_soe:latest

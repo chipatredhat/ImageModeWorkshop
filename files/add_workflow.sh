@@ -74,7 +74,7 @@ sudo chmod ug+x /usr/local/bin/act-runner
 sudo /usr/local/bin/act-runner generate-config | grep -v "^  #" | sudo tee -a /etc/act-runner/config.yaml
 sudo chown root:act-runner /etc/act-runner/config.yaml
 sudo chmod 640 /etc/act-runner/config.yaml
-#sudo sed -i "s/.runner/\/var\/lib\/act-runner\/.runner/" /etc/act-runner/config.yaml
+sudo sed -i "s/.runner/\/var\/lib\/act-runner\/.runner/" /etc/act-runner/config.yaml
 sudo sed -i "s/docker_host.*/docker_host: \"unix:\/\/\/run\/podman\/podman.sock\"/" /etc/act-runner/config.yaml
 curl https://raw.githubusercontent.com/nodiscc/xsrv/refs/heads/master/roles/gitea_act_runner/templates/etc_systemd_system_act-runner.service.j2 | sudo tee -a /etc/systemd/system/act-runner.service
 sudo systemctl daemon-reload
@@ -85,3 +85,13 @@ sudo systemctl enable podman.socket --now
 sudo chgrp act-runner /run/podman/podman.sock
 sudo chmod g+x /run/podman/podman.sock
 sudo systemctl enable act-runner --now
+
+# Testing:
+sudo sed -i 's/docker.gitea.com\/var\/lib\/act-runner\/.runner/gitea\/runner/' /var/lib/act-runner/.runner
+cd ~/git/rhel9-soe/
+cp /tmp/ImageModeWorkshop/files/Containerfile-new Containerfile
+mkdir -p .gitea/workflows
+cp /tmp/ImageModeWorkshop/files/build_rhel9.yaml .gitea/workflows/build_rhel9.yaml
+git add .
+git commit -m "Initial Commit"
+#git push

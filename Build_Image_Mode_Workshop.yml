@@ -20,6 +20,7 @@
     ISO10NAME: rhel-10.0-x86_64-dvd.iso
     WSDIR: /home/{{ USERNAME }}/Workshop
     IMFILES: "{{ WSDIR }}/files"
+    INSTANCE_TARGETHOST_FILE: /home/lab-user/external_ip
 
   tasks:
 
@@ -477,3 +478,15 @@
       state: started
       enabled: true
       name: haproxy
+
+  - name: Get TARGETHOST
+    ansible.builtin.command: cat {{ INSTANCE_TARGETHOST_FILE }}
+    register: TARGETHOST
+    # Referenced as TARGETHOST.stdout
+    
+  - name: Write novnc URL to a file
+    copy:
+      dest: "{{ WSDIR }}/Web_URL.html"
+      content: |
+        The web interface may be reached at https://{{ TARGETHOST.stdout }}/vnc.html?host={{ TARGETHOST.stdout }}&port=443
+    delegate_to: localhost

@@ -88,10 +88,10 @@ git push ; done
 
 ## Testing:
 #sudo sed -i 's/docker.gitea.com\/var\/lib\/act-runner\/.runner/gitea\/runner/' /var/lib/act-runner/.runner
-#cd ~/git/rhel9-soe/
-#cp /tmp/ImageModeWorkshop/files/Containerfile-new Containerfile
-#mkdir -p .gitea/workflows
-#cp /tmp/ImageModeWorkshop/files/build_rhel9.yaml .gitea/workflows/build_rhel9.yaml
-#git add .
-#git commit -m "Initial Commit"
-#git push
+cd ~/git/rhel9-soe/
+cp /tmp/ImageModeWorkshop/files/Containerfile-rhel9-soe Containerfile
+mkdir -p .gitea/workflows
+cp /tmp/ImageModeWorkshop/files/build_rhel9-soe.yaml .gitea/workflows/build_rhel9.yaml
+git add .
+git commit -m "Initial Commit"
+#git push  # Can't push until I have created and registered the runner

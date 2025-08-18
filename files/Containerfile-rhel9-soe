@@ -1,0 +1,5 @@
+# Release: 2025071702
+FROM registry.redhat.io/rhel9/rhel-bootc:latest
+RUN curl -s http://server.example.com/repo/local.repo -o /etc/yum.repos.d/local.repo
+RUN dnf -y install /http://server.example.com/example.com-root-ca-20240701-1.noarch.rpm
+RUN dnf -y update

@@ -36,6 +36,21 @@ echo "Sleeping 30 seconds to allow gitea to startup"
 sleep 30
 sudo -u git /usr/local/bin/gitea admin user create --username lab-user --password redhat --email lab-user@example.com --must-change-password=false --config /etc/gitea/app.ini 
 
+# Setup runner in a vm (using packagemode now for testing)
+sudo firewall-cmd --add-port=3000/tcp --zone=libvirt
+sudo -u git /usr/local/bin/gitea actions generate-runner-token --config /etc/gitea/app.ini | sudo tee -a /var/www/html/gitea_action
+sudo cp /var/www/html/ks/rhel94.cfg /var/www/html/ks/runner.cfg
+sudo sed -i '/podman/d' /var/www/html/ks/runner.cfg
+sudo sed -i '$d' /var/www/html/ks/runner.cfg
+echo "dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "systemctl enable --now docker" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "CURRENT_RUNNER=$(curl -s https://dl.gitea.com/act_runner/ | grep href | grep name | head -1 | cut -d '/' -f 3)" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "curl -s https://dl.gitea.com/act_runner/\${CURRENT_RUNNER}/act_runner-\${CURRENT_RUNNER}-linux-amd64 -o /usr/bin/act_runner" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "chmod +x /usr/bin/act_runner" | sudo tee -a /var/www/html/ks/runner.cfg
+echo "%end" | sudo tee -a /var/www/html/ks/runner.cfg
+sudo sed -i 's/rhel94.cfg/runner.cfg/' /var/www/html/pxe/pxelinux.cfg/01-de-ad-be-ef-fa-d1
+
 ### Configure gitea:
 # Create a token for lab-user:
 GITEA_USER_TOKEN=$(sudo -u git /usr/local/bin/gitea admin user generate-access-token -u lab-user --scopes all --config /etc/gitea/app.ini | awk '{print $6}')

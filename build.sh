@@ -49,5 +49,8 @@ ansible-playbook Build_Image_Mode_Workshop.yml -e PMUSERNAME="${PMUSERNAME}" -e 
 # Tag the RHEL 10 bootc container as latest
 podman image tag $(podman images | grep rhel10-beta | awk '{print $3}') registry.redhat.io/rhel10-beta/rhel-bootc:latest
 
+# Start the runner if the full pipeline is installed
+/home/lab-user/runner/start_runner.sh
+
 # Clear any history that may contain sensitive information
 history -c

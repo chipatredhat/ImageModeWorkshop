@@ -383,7 +383,7 @@
       - registry.redhat.io/rhel9/rhel-bootc:9.4-1722356971
       - registry.redhat.io/rhel9/rhel-bootc:9.4
       - registry.redhat.io/rhel9/rhel-bootc:latest
-      - registry.redhat.io/rhel10/rhel-bootc:latest
+    #  - registry.redhat.io/rhel10/rhel-bootc:latest  # Added at the bottom to troubleshoot why this isn't getting pulled
     become: true
     become_user: "{{ USERNAME }}"
 
@@ -491,3 +491,27 @@
       content: |
         The web interface may be reached at https://{{ TARGETHOST.stdout }}/vnc.html?host={{ TARGETHOST.stdout }}&port=443
     delegate_to: localhost
+
+#######################################################################################################################
+# All of this from here down is to troubleshoot why the RHEL 10 bootc image isn't pulled above with the RHEL 9 images #
+#######################################################################################################################
+
+  - name: Login to registry.redhat.io as user
+    containers.podman.podman_login:
+      username: "{{ PMUSERNAME }}"
+      password: "{{ PMPASSWORD }}"
+      registry: registry.redhat.io
+    become: true
+    become_user: "{{ USERNAME }}"
+
+  - name: Pull RHEL 10 bootc image
+    containers.podman.podman_image:
+      name: registry.redhat.io/rhel10/rhel-bootc:latest
+    become: true
+    become_user: "{{ USERNAME }}"
+
+  - name: Logout of registry.redhat.io as user
+    containers.podman.podman_logout:
+      registry: registry.redhat.io
+    become: true
+    become_user: "{{ USERNAME }}"

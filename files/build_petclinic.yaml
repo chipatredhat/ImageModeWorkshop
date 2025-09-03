@@ -1,0 +1,26 @@
+name: Build and Push the Petclinic image
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+
+  build:
+  
+    runs-on: imagemode
+
+    env:
+      RHEL_VERSION: 9 # 9 or 10
+      
+    steps:
+
+    - name: Get CA and install it
+      run: sudo dnf -y install http://server.example.com/example.com-root-ca-20240701-1.noarch.rpm
+
+    - name: use git to clone
+      run: git clone http://server.example.com:3000/lab-user/petclinic.git
+    
+    - name: build and push image
+      run: cd petclinic && podman build -f Containerfile --tag registry.example.com:5000/rhel$RHEL_VERSION/rhel-bootc-app:latest && podman push registry.example.com:5000/rhel$RHEL_VERSION/rhel-bootc-app:latest --tls-verify=false

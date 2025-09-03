@@ -15,6 +15,8 @@
     REGISTRYNAME: "registry"
     REPONAME: "repo"
     KSSERVER: "kickstart"
+    GITNAME: "git"
+    APPNAME: "petclinic"
     REGISTRYDIR: /root/registry
     ISO9NAME: rhel-9.4-x86_64-dvd.iso
     ISO10NAME: rhel-10.0-x86_64-dvd.iso
@@ -42,7 +44,7 @@
       path: /etc/hosts
       line: "{{ item }}"
     with_items: 
-      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }} {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }}"
+      - "192.168.122.1 {{ REGISTRYNAME }} {{ REGISTRYNAME }}.{{ DOMAINNAME }} {{ KSSERVER }} {{ KSSERVER }}.{{ DOMAINNAME }}  {{ REPONAME }} {{ REPONAME }}.{{ DOMAINNAME }} {{ SERVERNAME }} {{ SERVERNAME }}.{{ DOMAINNAME }} {{ GITNAME }} {{ GITNAME }}.{{ DOMAINNAME }} {{ APPNAME }} {{ APPNAME }}.{{ DOMAINNAME }}"
       - "10.11.12.101 packagemode packagemode.{{ DOMAINNAME }}"
       - "10.11.12.102 imagemode imagemode.{{ DOMAINNAME }}"
       - "10.11.12.103 appserver appserver.{{ DOMAINNAME }}"

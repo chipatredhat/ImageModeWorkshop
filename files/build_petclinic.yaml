@@ -20,5 +20,5 @@ jobs:
       run: git clone http://server.example.com:3000/lab-user/petclinic.git
     
     - name: build and push image
-      run: cd petclinic && podman build -f Containerfile --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest && podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest --tls-verify=false  # RHEL 9
-      #run: cd petclinic && podman build -f Containerfile --tag registry.example.com:5000/rhel10/rhel-bootc-app:latest && podman push registry.example.com:5000/rhel10/rhel-bootc-app:latest --tls-verify=false  # RHEL 10
+      run: cd petclinic && podman build -f Containerfile9 --tag registry.example.com:5000/rhel9/rhel-bootc-app:latest && podman push registry.example.com:5000/rhel9/rhel-bootc-app:latest --tls-verify=false  # RHEL 9
+      #run: cd petclinic && podman build -f Containerfile10 --tag registry.example.com:5000/rhel10/rhel-bootc-app:latest && podman push registry.example.com:5000/rhel10/rhel-bootc-app:latest --tls-verify=false  # RHEL 10

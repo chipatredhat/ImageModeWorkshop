@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhel10-beta/rhel-bootc:latest
+FROM registry.example.com:5000/rhel10/rhel-bootc:latest
 COPY files/local10.repo /etc/yum.repos.d/local10.repo
 RUN dnf install -y java-21-openjdk.x86_64 mariadb-server
 RUN systemctl enable mariadb

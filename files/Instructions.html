@@ -16,7 +16,7 @@ df -T  ***Note:** no sysroot*
 exit
 podman stop bootc</code></pre>
 <h3 id="examine-the-kickstart-file-we-will-use-to-build-this-server">Examine the kickstart file we will use to build this server</h3>
-<pre><code>less /var/www/html/ks/rhel94_imagemode.cfg</code></pre>
+<pre><code>less /usr/share/nginx/html/ks/rhel94_imagemode.cfg</code></pre>
 <h3 id="create-a-virtual-machine-with">Create a virtual machine with:</h3>
 <pre><code>./pxeboot_system.sh</code></pre>
 <p>Once the system is built and reboots, disconnect from the virtual console using Ctrl-]</p>

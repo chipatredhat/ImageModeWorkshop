@@ -23,6 +23,7 @@
     WSDIR: /home/{{ USERNAME }}/Workshop
     IMFILES: "{{ WSDIR }}/files"
     INSTANCE_TARGETHOST_FILE: /home/lab-user/external_ip
+    WEB_DIRECTORY: /usr/share/nginx"
 
   tasks:
 
@@ -67,7 +68,7 @@
       - virt-manager
       - virt-install
       - cockpit-machines
-      - httpd
+      - nginx
       - podman
       - haproxy
       - syslinux-tftpboot
@@ -147,9 +148,9 @@
       enabled: true
       state: started
 
-  - name: Enable and start httpd
+  - name: Enable and start nginx
     ansible.builtin.systemd_service:
-      name: httpd
+      name: nginx
       enabled: true
       state: started
 
@@ -168,7 +169,7 @@
   - name: Create the root CA for example.com
     ansible.builtin.copy:
       src: files/ca.example.com.crt
-      dest: /var/www/html/ca.example.com.crt
+      dest: "{{ WEB_DIRECTORY }}/ca.example.com.crt"
 
   - name: Create the data directory for the registry container
     ansible.builtin.file:
@@ -212,83 +213,83 @@
   - name: Copy the example.com CA rpm to the webserver
     ansible.builtin.copy:
       src: files/example.com-root-ca-20240701-1.noarch.rpm
-      dest: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
+      dest: "{{ WEB_DIRECTORY }}/example.com-root-ca-20240701-1.noarch.rpm"
 
-  - name: Create directories in /var/www/html
+  - name: Create directories in "{{ WEB_DIRECTORY }}"
     ansible.builtin.file:
       state: directory
       path: "{{ item }}"
     with_items: 
-      - /var/www/html/repo
-      - /var/www/html/ks
-      - /var/www/html/rhel94
-      - /var/www/html/rhel10
-      - /var/www/html/pxe/rhel94
-      - /var/www/html/pxe/pxelinux.cfg
-      - /var/www/html/petclinic
+      - "{{ WEB_DIRECTORY }}/repo"
+      - "{{ WEB_DIRECTORY }}/ks"
+      - "{{ WEB_DIRECTORY }}/rhel94"
+      - "{{ WEB_DIRECTORY }}/rhel10"
+      - "{{ WEB_DIRECTORY }}/pxe/rhel94"
+      - "{{ WEB_DIRECTORY }}/pxe/pxelinux.cfg"
+      - "{{ WEB_DIRECTORY }}/petclinic"
 
-  - name: Mount RHEL 9.4 DVD to /var/www/html/rhel94
+  - name: Mount RHEL 9.4 DVD to "{{ WEB_DIRECTORY }}/rhel94"
     mount:
-      path: /var/www/html/rhel94
+      path: "{{ WEB_DIRECTORY }}/rhel94"
       src: /mnt/iso/{{ ISO9NAME }}
       fstype: iso9660
       opts: ro
       state: mounted
 
-  - name: Mount RHEL 10 DVD to /var/www/html/rhel10
+  - name: Mount RHEL 10 DVD to "{{ WEB_DIRECTORY }}/rhel10"
     mount:
-      path: /var/www/html/rhel10
+      path: "{{ WEB_DIRECTORY }}/rhel10"
       src: /mnt/iso/{{ ISO10NAME }}
       fstype: iso9660
       opts: ro
       state: mounted
 
-  - name: Copy initrd.img to /var/www/html/pxe/rhel94
+  - name: Copy initrd.img to "{{ WEB_DIRECTORY }}/pxe/rhel94"
     ansible.builtin.copy:
-      src: /var/www/html/rhel94/isolinux/initrd.img
-      dest: /var/www/html/pxe/rhel94/initrd.img
+      src: "{{ WEB_DIRECTORY }}/rhel94/isolinux/initrd.img"
+      dest: "{{ WEB_DIRECTORY }}/pxe/rhel94/initrd.img"
       remote_src: true
 
-  - name: Copy vmlinuz to /var/www/html/pxe/rhel94
+  - name: Copy vmlinuz to "{{ WEB_DIRECTORY }}/pxe/rhel94"
     ansible.builtin.copy:
-      src: /var/www/html/rhel94/isolinux/vmlinuz
-      dest: /var/www/html/pxe/rhel94/vmlinuz
+      src: "{{ WEB_DIRECTORY }}/rhel94/isolinux/vmlinuz"
+      dest: "{{ WEB_DIRECTORY }}/pxe/rhel94/vmlinuz"
       remote_src: true  
 
-  - name: Copy the pxe files to /var/www/html/pxe
+  - name: Copy the pxe files to "{{ WEB_DIRECTORY }}/pxe"
     ansible.builtin.copy:
       src: /tftpboot/
-      dest: /var/www/html/pxe/
+      dest: "{{ WEB_DIRECTORY }}/pxe/"
       remote_src: true
 
-  - name: Copy pxeboot files to /var/www/html/pxe/pxelinux.cfg/
+  - name: Copy pxeboot files to "{{ WEB_DIRECTORY }}/pxe/pxelinux.cfg/"
     ansible.builtin.copy:
       src: files/pxelinux.cfg/
-      dest: /var/www/html/pxe/pxelinux.cfg/
+      dest: "{{ WEB_DIRECTORY }}/pxe/pxelinux.cfg/"
 
-  - name: Copy rhel94.cfg to /var/www/html/ks
+  - name: Copy rhel94.cfg to "{{ WEB_DIRECTORY }}/ks"
     ansible.builtin.copy:
       src: files/rhel94.cfg
-      dest: /var/www/html/ks/rhel94.cfg
+      dest: "{{ WEB_DIRECTORY }}/ks/rhel94.cfg"
 
-  - name: Copy rhel94_imagemode.cfg to /var/www/html/ks
+  - name: Copy rhel94_imagemode.cfg to "{{ WEB_DIRECTORY }}/ks"
     ansible.builtin.copy:
       src: files/rhel94_imagemode.cfg
-      dest: /var/www/html/ks/rhel94_imagemode.cfg
+      dest: "{{ WEB_DIRECTORY }}/ks/rhel94_imagemode.cfg"
 
-  - name: Copy rhel94_imagemodeapp.cfg to /var/www/html/ks
+  - name: Copy rhel94_imagemodeapp.cfg to "{{ WEB_DIRECTORY }}/ks"
     ansible.builtin.copy:
       src: files/rhel94_imagemodeapp.cfg
-      dest: /var/www/html/ks/rhel94_imagemodeapp.cfg
+      dest: "{{ WEB_DIRECTORY }}/ks/rhel94_imagemodeapp.cfg"
 
-  - name: Copy Instructions.html to /var/www/html
+  - name: Copy Instructions.html to "{{ WEB_DIRECTORY }}"
     ansible.builtin.copy:
       src: files/Instructions.html
-      dest: /var/www/html/Instructions.html
+      dest: "{{ WEB_DIRECTORY }}/Instructions.html"
       
   - name: Install the example.com CA rpm so we can push to the registry
     ansible.builtin.yum:
-      name: /var/www/html/example.com-root-ca-20240701-1.noarch.rpm
+      name: "{{ WEB_DIRECTORY }}/example.com-root-ca-20240701-1.noarch.rpm"
       disable_gpg_check: yes
 
   - name: Create workshop directories
@@ -372,10 +373,10 @@
       owner: "{{ USERNAME }}"
       group: users
 
-  - name: Add local.repo to /var/www/html/repo
+  - name: Add local.repo to "{{ WEB_DIRECTORY }}/repo"
     ansible.builtin.copy:
       src: files/local.repo
-      dest: /var/www/html/repo/local.repo
+      dest: "{{ WEB_DIRECTORY }}/repo/local.repo"
 
   - name: Login to registry.redhat.io as user
     containers.podman.podman_login:
@@ -459,7 +460,7 @@
   - name: Copy petclinic.sql
     ansible.builtin.copy:
       src: files/petclinic.sql
-      dest: /var/www/html/petclinic/petclinic.sql
+      dest: "{{ WEB_DIRECTORY }}/petclinic/petclinic.sql"
 
   - name: Copy kickstart_config.toml
     ansible.builtin.copy:

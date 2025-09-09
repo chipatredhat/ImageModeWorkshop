@@ -26,7 +26,7 @@ RUN dnf -y install http://kickstart.example.com/example.com-root-ca-20240701-1.n
 
 ### Examine the kickstart file we will use to build this server
 ```
-less /var/www/html/ks/rhel94_imagemode.cfg
+less /usr/share/nginx/html/ks/rhel94_imagemode.cfg
 ```
 
 ### Create a virtual machine with:
